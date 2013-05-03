@@ -9,6 +9,7 @@
     "csv": "0.3.x",
     "express": "3.2.1",
     "jade": "*",
+    "mongoose": "3.6.x",
     "stylus": "*"
   },
   "devDependencies": {
