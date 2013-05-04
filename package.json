@@ -9,10 +9,12 @@
     "csv": "0.3.x",
     "express": "3.2.1",
     "jade": "*",
+    "mathjs": "0.7.x",
     "mongoose": "3.6.x",
     "stylus": "*"
   },
   "devDependencies": {
-    "jake": "0.5.x"
+    "jake": "0.5.x",
+    "prompt": "*"
   }
 }

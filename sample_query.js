@@ -7,7 +7,7 @@ var latHigh = 35.4;
 var geojsonPoly = { type: 'Polygon', coordinates: [[[lngLow,latLow], [lngLow,latHigh], [lngHigh,latLow], [lngHigh,latHigh]]] };
 
 
-Store.find({loc: { $within: { $geometry: geojsonPoly }}}, function (err, store) { 
+Store.find({loc: { $within: { $geometry: geojsonPoly }}}, function (err, store) {
   if (err) console.log(err);
-  else console.log(store); 
+  else console.log(store);
 });
