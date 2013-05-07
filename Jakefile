@@ -85,8 +85,8 @@ task('import_households', function () {
 function createTransaction(row) {
   return {
     storeId:     row.STORE,
-    description: row.DESCRIPTION,
-    netSales:    row.NET_SALES,
+    description: row.DESCRIPTION.replace(/^\s+/, '').replace(/\s\s*$/, ''),
+    netSales:    parseFloat(row.NET_SALES),
     date:        row.DATE
   };
 }

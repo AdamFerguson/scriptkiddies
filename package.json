@@ -10,6 +10,7 @@
     "express": "3.2.1",
     "jade": "*",
     "mathjs": "0.7.x",
+    "mongojs": "0.7.x",
     "mongoose": "3.6.x",
     "stylus": "*"
   },
