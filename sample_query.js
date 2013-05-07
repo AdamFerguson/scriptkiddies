@@ -10,4 +10,6 @@ var geojsonPoly = { type: 'Polygon', coordinates: [[[lngLow,latLow], [lngHigh,la
 Store.find({loc: { $within: { $geometry: geojsonPoly }}}, function (err, store) {
   if (err) console.log(err);
   else console.log(store);
+
+  process.exit();
 });
