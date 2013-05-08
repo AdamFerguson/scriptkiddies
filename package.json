@@ -12,6 +12,7 @@
     "mathjs": "0.7.x",
     "mongojs": "0.7.x",
     "mongoose": "3.6.x",
+    "node-foursquare": "0.2.x",
     "stylus": "*"
   },
   "devDependencies": {
