@@ -90,9 +90,13 @@ task('import_households', function () {
 
 function createTransaction(row) {
   return {
-    storeId:     row.STORE,
-    description: row.DESCRIPTION.replace(/^\s+/, '').replace(/\s\s*$/, ''),
+    storeId:     parseInt(stripWhitespace(row.STORE), 10),
+    description: stripWhitespace(row.DESCRIPTION),
     netSales:    parseFloat(row.NET_SALES),
-    date:        row.DATE
+    date:        new Date(stripWhitespace(row.DATE))
   };
+}
+
+function stripWhitespace(string) {
+  return string.replace(/^\s+/, '').replace(/\s\s*$/, '');
 }
