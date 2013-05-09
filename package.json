@@ -8,6 +8,7 @@
   "dependencies": {
     "csv": "0.3.x",
     "express": "3.2.1",
+    "forever": "0.10.x",
     "jade": "*",
     "mathjs": "0.7.x",
     "mongojs": "0.7.x",
