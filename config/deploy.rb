@@ -1,7 +1,7 @@
 # see: http://blog.evantahler.com/blog/deploying-node-js-applications-with-capistrano.html
 
 set :application, "scriptkiddies"
-set :repository,  "git@github.com/AdamFerguson/scriptkiddies.git"
+set :repository,  "git@github.com:AdamFerguson/scriptkiddies.git"
 set :scm, :git
 set :use_sudo, false
 set :user, :deploy
