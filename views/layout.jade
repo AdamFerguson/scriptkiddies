@@ -2,6 +2,8 @@ doctype 5
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/foundation.min.css')
     link(rel='stylesheet', href='/stylesheets/leaflet.css')
     //if lte IE 8
       link(rel='stylesheet', href='/stylesheets/leaflet.ie.css')
@@ -9,11 +11,15 @@ html
     link(rel='stylesheet', href='/stylesheets/MarkerCluster.css')
     link(rel='stylesheet', href='/stylesheets/MarkerCluster.Default.css')
 
+    script(src='/javascripts/custom.modernizr.js')
     script(src='/javascripts/jquery-1.9.1.min.js')
+    script(src='/javascripts/foundation.min.js')
     script(src='/javascripts/leaflet.js')
     script(src='/javascripts/d3.v3.js')
     script(src='/javascripts/underscore-min.js')
     script(src='/javascripts/leaflet.markercluster.js')
     script(src='/javascripts/app.js')
   body
+    h1 HackathonCLT
+    h2 Script Kiddies
     block content
