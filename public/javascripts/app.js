@@ -30,28 +30,43 @@ var base =  {
 };
 
 var teeterList = [];
+var stores= [];
 $.getJSON('/stores', function(data) {
+  stores = data;
   $.each(data, function(key, val) {
     var desc = "Harris Teeter #" + val.storeId;
-    var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon}).bindPopup(desc);
+    var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon},{title: val.storeId}).bindLabel(desc);
+    teeter.on('click', onMarkerClick);
     teeterList.push(teeter);
   });
   var teeters = L.layerGroup(teeterList);
+
   var overlays = {"Harris Teeters": teeters};
   L.control.layers(base,overlays).addTo(map);
 });
 
+
 var markers = new L.MarkerClusterGroup();
-var markerList = [];
-$.getJSON('/stores/1/households', function(data) {
-   $.each(data, function(key, val) {
-     var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
-     markerList.push(marker);
-   });
-    //Why does this work here
-    markers.addLayers(markerList);
-    map.addLayer(markers);
- });
+function onMarkerClick(e) {
+   $.each(stores, function(key, val) {
+      console.log(e);
+      if( val.loc[1] == e.target._latlng.lat && val.loc[0] == e.target._latlng.lng){
+      var markerList = [];
+      var storeurl = '/stores/' + val.storeId + '/households';
+      $.getJSON(storeurl, function(data) {
+         $.each(data, function(key, val) {
+           var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
+           markerList.push(marker);
+         });
+          //Why does this work here
+          markers.clearLayers();
+          markers.addLayers(markerList);
+          map.addLayer(markers);
+       });
+    }
+  });
+}
+
 
     //And not work here? I don't understand javascript scoping
     //markers.addLayers(markerList);
