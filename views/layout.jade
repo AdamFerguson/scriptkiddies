@@ -12,16 +12,18 @@ html
     link(rel='stylesheet', href='/stylesheets/MarkerCluster.Default.css')
     link(rel='stylesheet', href='/stylesheets/leaflet.label.css')
 
-    script(src='/javascripts/custom.modernizr.js')
-    script(src='/javascripts/jquery-1.9.1.min.js')
-    script(src='/javascripts/foundation.min.js')
-    script(src='/javascripts/leaflet.js')
-    script(src='/javascripts/d3.v3.js')
-    script(src='/javascripts/underscore-min.js')
-    script(src='/javascripts/leaflet.markercluster.js')
-    script(src='/javascripts/leaflet.label.js')
-    script(src='/javascripts/app.js')
+    script(src='javascripts/require.js', data-main='javascripts/main.js')
+    script(src='javascripts/custom.modernizr.js')
+    // script(src='/javascripts/jquery-1.9.1.min.js')
+    // script(src='/javascripts/foundation.min.js')
+    // script(src='/javascripts/leaflet.js')
+    // script(src='/javascripts/d3.v3.js')
+    // script(src='/javascripts/underscore-min.js')
+    // script(src='/javascripts/leaflet.markercluster.js')
+    // script(src='/javascripts/leaflet.label.js')
+    // script(src='/javascripts/app.js')
   body
     h1 HackathonCLT
     h2 Script Kiddies
     block content
+
