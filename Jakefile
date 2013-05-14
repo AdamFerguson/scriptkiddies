@@ -53,7 +53,7 @@ task('import_households', function () {
 
           house = new Household({
             householdId: row.HOUSEHOLD_NUM,
-            loc: [row.HOUSE_LONGITUDE, row.HOUSE_LATITUDE],
+            loc: {type: 'Point', coordinates: [row.HOUSE_LONGITUDE, row.HOUSE_LATITUDE]},
             transactions: [createTransaction(row)]
           });
           house.save(function(err) {

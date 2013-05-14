@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 var householdSchema = mongoose.Schema({
   householdId: { type: Number, index: true, unique: true },
-  loc: { type: [Number], index: '2dsphere'},
+  loc: { type: { type: String }, coordinates: [Number]},
   transactions: [{
     date:        {type: Date, index: true},
     netSales:    {type: Number},
@@ -13,5 +13,7 @@ var householdSchema = mongoose.Schema({
     segmentId:   {type: Number, index: true}
   }]
 });
+
+householdSchema.index({loc: '2dsphere'});
 
 var Household = module.exports = mongoose.model('Household', householdSchema);

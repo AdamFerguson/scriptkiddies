@@ -1,5 +1,5 @@
-var Store = require('./models').Store;
-var Household = require('./models').Household;
+var Store = require('../models').Store;
+var Household = require('../models').Household;
 
 var lngLow  = -80.8;
 var lngHigh = -80.75;
@@ -8,13 +8,21 @@ var latHigh = 35.4;
 var geojsonPoly = { type: 'Polygon', coordinates: [[[lngLow,latLow], [lngHigh,latLow], [lngHigh,latHigh], [lngLow,latHigh],[lngLow,latLow]]] };
 
 
-Store.find({loc: { $within: { $geometry: geojsonPoly }}}, function (err, store) {
-  if (err) console.log(err);
-  else console.log(store);
+// Store.find({loc: { $within: { $geometry: geojsonPoly }}}, function (err, store) {
+//   if (err) console.log(err);
+//   else console.log(store);
+//
+// });
 
-});
-
-Houshold.find({ "transactions.loc" : { $near : { $geometry: { type: 'Point', coordinates: [ -80.9690466922475, 35.3261101803714 ]} }, $maxDistance: 1500 } },
-                  function(err, results) {
-                    console.log(err,results);
-                  });
+Household.find(
+  { loc :
+    { $near :
+      { $geometry:
+        { type: 'Point', coordinates: [ -80.9690466922475, 35.3261101803714 ] }
+      }
+      , $maxDistance: 1500
+    }
+  },
+  function(err, results) {
+    console.log(err,results);
+  });
