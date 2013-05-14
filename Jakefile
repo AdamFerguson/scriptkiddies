@@ -42,7 +42,6 @@ task('import_households', function () {
       if (err) console.log(err);
       else {
         if (house) {
-          if (house.segmentIds.indexOf(row.SEG_ID) == -1) house.segmentIds.push(row.SEG_ID);
           house.transactions.push(createTransaction(row));
           house.save(function(err) {
             if (err) console.log(err);
@@ -55,7 +54,6 @@ task('import_households', function () {
           house = new Household({
             householdId: row.HOUSEHOLD_NUM,
             loc: [row.HOUSE_LONGITUDE, row.HOUSE_LATITUDE],
-            segmentIds: [row.SEG_ID],
             transactions: [createTransaction(row)]
           });
           house.save(function(err) {
@@ -93,7 +91,8 @@ function createTransaction(row) {
     storeId:     parseInt(stripWhitespace(row.STORE), 10),
     description: stripWhitespace(row.DESCRIPTION),
     netSales:    parseFloat(row.NET_SALES),
-    date:        new Date(stripWhitespace(row.DATE))
+    date:        new Date(stripWhitespace(row.DATE)),
+    segmentId:   parseInt(row.SEG_ID, 10)
   };
 }
 
