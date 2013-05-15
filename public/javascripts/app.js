@@ -1,6 +1,7 @@
 
 define([
        'jquery',
+       'angular',
        'foundation',
        'leaflet',
        'd3',
@@ -9,9 +10,15 @@ define([
        'leaflet-label',
        'locationfilter',
        'socketio',
-       'streamable'
-      ], function() {
+       'streamable',
+       'angular-leaflet-directive'
+      ], function($,angular) {
+
+  var app = angular.module('scriptkiddies', []);
+
   $(function() {
+
+  angular.bootstrap(document, ['scriptkiddies']);
 
   var teetercon = L.icon({
       iconUrl: '/images/ht.png',
@@ -63,7 +70,7 @@ define([
     $.each(data, function(key, val) {
       var desc = "Harris Teeter #" + val.storeId;
       var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon},{title: val.storeId}).bindLabel(desc);
-      teeter.on('click', onMarkerClick);
+      // teeter.on('click', onMarkerClick);
       teeterList.push(teeter);
     });
     var teeters = L.layerGroup(teeterList);
@@ -73,33 +80,32 @@ define([
   });
 
 
-  var markers = new L.MarkerClusterGroup();
-  function onMarkerClick(e) {
-     $.each(stores, function(key, val) {
-        console.log(e);
-        if( val.loc[1] == e.target._latlng.lat && val.loc[0] == e.target._latlng.lng){
-        var markerList = [];
-        var storeurl = '/stores/' + val.storeId + '/households';
-        $.getJSON(storeurl, function(data) {
-           $.each(data, function(key, val) {
-             var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
-             markerList.push(marker);
-           });
-            //Why does this work here
-            markers.clearLayers();
-            markers.addLayers(markerList);
-            map.addLayer(markers);
-         });
-      }
-    });
-  }
+  // var markers = new L.MarkerClusterGroup();
+  // function onMarkerClick(e) {
+  //    $.each(stores, function(key, val) {
+  //       console.log(e);
+  //       if( val.loc[1] == e.target._latlng.lat && val.loc[0] == e.target._latlng.lng){
+  //       var markerList = [];
+  //       var storeurl = '/stores/' + val.storeId + '/households';
+  //       $.getJSON(storeurl, function(data) {
+  //          $.each(data, function(key, val) {
+  //            var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
+  //            markerList.push(marker);
+  //          });
+  //           //Why does this work here
+  //           markers.clearLayers();
+  //           markers.addLayers(markerList);
+  //           map.addLayer(markers);
+  //        });
+  //     }
+  //   });
+  // }
 
+  // Themes:
+  // - Dark Blue: 67367
+  // - Transparent: 998
 
-      //And not work here? I don't understand javascript scoping
-      //markers.addLayers(markerList);
-      //map.addLayer(markers);
-        // Themes:
-        // - Dark Blue: 67367
-        // - Transparent: 998
   });
+
+  return app;
 });

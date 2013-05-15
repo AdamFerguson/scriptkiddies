@@ -1,4 +1,5 @@
 extends layout
 
 block content
-  #map
+  #map(ng-controller='MapController')
+    leaflet(markers='markers', center='center')
