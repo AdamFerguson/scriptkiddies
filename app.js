@@ -30,6 +30,7 @@ if ('development' == app.get('env')) {
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+io.set('log level', 1);
 var streamable = exports.streamable = require('streamable').streamable(io);
 
 require('./routes')(app);

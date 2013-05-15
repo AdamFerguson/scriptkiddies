@@ -20,7 +20,6 @@ exports.byStoreId = function(req, res) {
 };
 
 exports.searchByBounds = [streamable, function(req, res) {
-  console.log(req.query);
   var neLat = parseFloat(req.query.neLat);
   var neLng = parseFloat(req.query.neLng);
   var swLat = parseFloat(req.query.swLat);
