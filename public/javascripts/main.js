@@ -11,7 +11,8 @@ require.config({
       exports: '_'
     },
     'leaflet-markercluster': ['leaflet'],
-    'leaflet-label':['leaflet']
+    'leaflet-label':['leaflet'],
+    'locationfilter':['leaflet']
   },
 
   paths: {
@@ -21,10 +22,9 @@ require.config({
     d3:                      'd3.v3',
     underscore:              'underscore-min',
     'leaflet-markercluster': 'leaflet.markercluster',
-    'leaflet-label':         'leaflet.label'
+    'leaflet-label':         'leaflet.label',
+    locationfilter:          'locationfilter'
   }
 });
 
-require(['app'], function(app) {
-  console.log(app);
-});
+require(['app'], function(app) { });

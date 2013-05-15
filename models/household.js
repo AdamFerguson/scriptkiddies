@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 
 var householdSchema = mongoose.Schema({
   householdId: { type: Number, index: true, unique: true },
-  loc: { type: { type: String }, coordinates: [Number]},
+  // loc: { type: { type: String }, coordinates: [Number]},
+  loc: { type: [Number] },
   transactions: [{
     date:        {type: Date, index: true},
     netSales:    {type: Number},
@@ -15,5 +16,8 @@ var householdSchema = mongoose.Schema({
 });
 
 householdSchema.index({loc: '2dsphere'});
+var searchByBounds = require('../lib/search_utils').searchByBounds;
+
+householdSchema.static('searchByBounds', searchByBounds);
 
 var Household = module.exports = mongoose.model('Household', householdSchema);

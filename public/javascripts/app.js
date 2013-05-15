@@ -6,7 +6,8 @@ define([
        'd3',
        'underscore',
        'leaflet-markercluster',
-       'leaflet-label'
+       'leaflet-label',
+       'locationfilter'
       ], function() {
   $(function() {
 
@@ -28,6 +29,21 @@ define([
           zoom: 10,
           layers: [minimal,googleclone]
     });
+
+  var locationFilter = new L.LocationFilter().addTo(map);
+
+  locationFilter.on('change', function(e) {
+    var ne = e.bounds.getNorthEast();
+    var sw = e.bounds.getSouthWest();
+    var reqData = {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng};
+    var promise = $.get('/households/search/bounds', reqData, 'json');
+    promise.done(function(data,status,jqXHR) {
+      console.log(data,status,jqXHR);
+    });
+    promise.fail(function(data,status,jqXHR) {
+      console.log(data,status,jqXHR);
+    });
+  });
 
   var base =  {
       "Minimal": minimal,
