@@ -7,7 +7,9 @@ define([
        'underscore',
        'leaflet-markercluster',
        'leaflet-label',
-       'locationfilter'
+       'locationfilter',
+       'socketio',
+       'streamable'
       ], function() {
   $(function() {
 
@@ -35,14 +37,18 @@ define([
   locationFilter.on('change', function(e) {
     var ne = e.bounds.getNorthEast();
     var sw = e.bounds.getSouthWest();
-    var reqData = {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng};
-    var promise = $.get('/households/search/bounds', reqData, 'json');
-    promise.done(function(data,status,jqXHR) {
-      console.log(data,status,jqXHR);
+    var reqData = {params: {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng}};
+    Streamable.get('/households/search/bounds', reqData, {
+      onData:  function(data) { console.log(data); },
+      onError: function(e) { console.log(e); },
+      onEnd:   function() { console.log('all done'); }
     });
-    promise.fail(function(data,status,jqXHR) {
-      console.log(data,status,jqXHR);
-    });
+    // promise.done(function(data,status,jqXHR) {
+    //   console.log(data,status,jqXHR);
+    // });
+    // promise.fail(function(data,status,jqXHR) {
+    //   console.log(data,status,jqXHR);
+    // });
   });
 
   var base =  {

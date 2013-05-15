@@ -1,4 +1,5 @@
 var Household = require('../models').Household;
+var streamable = require('../app').streamable;
 
 exports.list = function(req, res){
   Household.find({}, function(err,houses) {
@@ -18,15 +19,16 @@ exports.byStoreId = function(req, res) {
   });
 };
 
-exports.searchByBounds = function(req, res) {
+exports.searchByBounds = [streamable, function(req, res) {
+  console.log(req.query);
   var neLat = parseFloat(req.query.neLat);
   var neLng = parseFloat(req.query.neLng);
   var swLat = parseFloat(req.query.swLat);
   var swLng = parseFloat(req.query.swLng);
-  Household.searchByBounds(neLat,neLng,swLat,swLng).exec(function(err,results) {
+  Household.searchByBounds(neLat,neLng,swLat,swLng).stream().pipe(res); /*exec(function(err,results) {
     if (err) res.status(500).send(err);
     else {
       res.send(results);
     }
-  });
-};
+  });*/
+}];
