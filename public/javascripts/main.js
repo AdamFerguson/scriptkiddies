@@ -23,7 +23,7 @@ require.config({
     underscore:              'vendor/underscore-min',
     'leaflet-markercluster': 'vendor/leaflet.markercluster',
     'leaflet-label':         'vendor/leaflet.label',
-    locationfilter:          'locationfilter'
+    locationfilter:          'vendor/locationfilter'
   }
 });
 
