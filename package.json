@@ -14,6 +14,8 @@
     "mongojs": "0.7.x",
     "mongoose": "3.6.x",
     "node-foursquare": "0.2.x",
+    "socket.io": "0.9.x",
+    "streamable": "0.6.x",
     "stylus": "*"
   },
   "devDependencies": {

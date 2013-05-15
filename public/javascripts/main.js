@@ -16,13 +16,13 @@ require.config({
   },
 
   paths: {
-    foundation:              'foundation.min',
-    jquery:                  'jquery-1.9.1.min',
-    leaflet:                 'leaflet',
-    d3:                      'd3.v3',
-    underscore:              'underscore-min',
-    'leaflet-markercluster': 'leaflet.markercluster',
-    'leaflet-label':         'leaflet.label',
+    foundation:              'vendor/foundation.min',
+    jquery:                  'vendor/jquery-1.9.1.min',
+    leaflet:                 'vendor/leaflet',
+    d3:                      'vendor/d3.v3',
+    underscore:              'vendor/underscore-min',
+    'leaflet-markercluster': 'vendor/leaflet.markercluster',
+    'leaflet-label':         'vendor/leaflet.label',
     locationfilter:          'locationfilter'
   }
 });
