@@ -6,11 +6,12 @@ leafletDirective.directive("leaflet", ["$http", "$log", function ($http, $log) {
         replace: true,
         transclude: true,
         scope: {
-            center: "=center",
-            tilelayer: "=tilelayer",
-            markers: "=markers",
-            leafletMarkers: "=leafletMarkers",
-            path: "=path",
+            center: "=",
+            tilelayer: "=",
+            markers: "=",
+            leafletMarkers: "=",
+            path: "=",
+            controls: "=",
             maxZoom: "@maxzoom"
         },
         template: '<div class="angular-leaflet-map"></div>',
@@ -25,16 +26,36 @@ leafletDirective.directive("leaflet", ["$http", "$log", function ($http, $log) {
 
             // Set maxZoom from attrs
             if (attrs.maxzoom){
-                scope.maxZoom = parseInt(attrs.maxzoom)
+                scope.maxZoom = parseInt(attrs.maxzoom, 10);
             }
 
             // Set initial view
             map.setView([0, 0], 1);
 
             // Set tile layer
-            var tilelayer = scope.tilelayer || 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             var maxZoom = scope.maxZoom || 12;
-            L.tileLayer(tilelayer, { maxZoom: maxZoom }).addTo(map);
+            var defaultlayer = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+            var defaultOptions = {maxZoom: maxZoom};
+            var tilelayer, tilelayerOptions;
+            if (scope.tilelayer) {
+              tilelayer = scope.tilelayer.url || defaultlayer;
+              tilelayerOptions = angular.extend(defaultOptions, scope.tilelayer.options);
+            } else {
+              tilelayer = defaultlayer;
+              tilelayerOptions = defaultOptions;
+            }
+            L.tileLayer(tilelayer, tilelayerOptions).addTo(map);
+
+            scope.$watch('controls', function(newControls, oldControls) {
+              if (!angular.equals(newControls, oldControls)) {
+                _.difference(oldControls,newControls).forEach(function(control) {
+                  control.removeFrom(map);
+                });
+                _.difference(newControls, oldControls).forEach(function(control) {
+                  control.addTo(map);
+                });
+              }
+            });
 
             // Manage map center events
             if (attrs.center && scope.center) {
@@ -117,7 +138,7 @@ leafletDirective.directive("leaflet", ["$http", "$log", function ($http, $log) {
                     return marker;
                 }; // end of create and link marker
 
-                var leafletMarkers = {}
+                var leafletMarkers = {};
 
                 // Expose the map object, for testing purposes
                 if (attrs.leafletMarkers) {

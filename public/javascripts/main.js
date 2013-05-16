@@ -35,4 +35,8 @@ require.config({
   }
 });
 
-require(['app', 'map_controller'], function(app) { debugger; });
+require(['app', 'controllers', 'directives'], function(app) {
+  $(function() {
+    angular.bootstrap(document, ['scriptkiddies']);
+  });
+});

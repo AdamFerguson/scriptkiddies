@@ -24,10 +24,5 @@ exports.searchByBounds = [streamable, function(req, res) {
   var neLng = parseFloat(req.query.neLng);
   var swLat = parseFloat(req.query.swLat);
   var swLng = parseFloat(req.query.swLng);
-  Household.searchByBounds(neLat,neLng,swLat,swLng).stream().pipe(res); /*exec(function(err,results) {
-    if (err) res.status(500).send(err);
-    else {
-      res.send(results);
-    }
-  });*/
+  Household.searchByBounds(neLat,neLng,swLat,swLng).stream().pipe(res);
 }];
