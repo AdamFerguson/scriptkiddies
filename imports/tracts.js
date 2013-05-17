@@ -42,27 +42,48 @@ exports.importTracts = function() {
     done();
   }
 
-  var populationImport = function(done) {
-    var total, soFar;
+  var familiesImport = function(done) {
+    var total = 0, soFar = 0;
 
     csv().
       from.path(__dirname+'/../data/census/all_140_in_37.P35.csv', {columns: true}).
       on('record', function(row, index) {
         total++;
-        Tract.findOne({tractId: row.GEOID}, function(err,tract) {
+        var data = {
+          totalPopulations: [
+            {year: 2000, count: row['POP100.2000']},
+            {year: 2010, count: row['POP100']}
+          ],
+          numHouseholds: [
+            {year: 2000, count: row['HU100.2000']},
+            {year: 2010, count: row['HU100']}
+          ],
+          numFamilies: [
+            {year: 2000, count: row['P035001.2000']},
+            {year: 2010, count: row['P035001']}
+          ]
+        }
+        Tract.update({tractId: row.GEOID}, data, function(err,tract) {
+          soFar++;
           if (err) console.log(err);
           else {
+            console.log('Population import: ' + soFar);
+          }
+
+          if (soFar === total) {
+            console.log('done importing populating');
+            done();
           }
         });
       });
-  }
+  };
 
   var averageHouseholdSizesByAgeImport = function(done) {
-  }
+  };
 
   var gendersByAgeImport = function(done) {
-  }
+  };
 
-  async.series([/*tractsJsonImport,*/ metadataImport])
+  async.series([tractsJsonImport, metadataImport, familiesImport]);
 
 };
