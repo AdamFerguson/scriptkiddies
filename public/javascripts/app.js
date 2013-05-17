@@ -96,16 +96,18 @@ define([
     L.control.layers(base,overlays).addTo(map);
   });
 
+  var results = [];
   Streamable.get('/tracts',  {
       onData:  function(data) { 
         parsed = JSON.parse(data);
-        console.log(parsed.loc);
-        /*for (var key in data) {
-          console.log(key); 
-        }*/
+        //console.log(parsed.loc.coordinates[0].length);
+        results.push(parsed.loc.coordinates[0].length);
       },
       onError: function(e) { console.log(e); },
-      onEnd:   function() { console.log('all done'); }
+      onEnd:   function() { 
+        console.log('all done'); 
+        console.log(_.max(results));
+      }
     });
 
   var markers = new L.MarkerClusterGroup();

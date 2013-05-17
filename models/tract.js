@@ -27,6 +27,7 @@ var tractSchema = mongoose.Schema({
   }],
   gendersByAge: [{
     year: { type: Number, index: true },
+    gender: { type: String, index: true},
     ageRange: {
       minAge: { type: Number, index: true },
       maxAge: { type: Number, index: true }

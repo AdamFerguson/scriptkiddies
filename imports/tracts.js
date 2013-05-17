@@ -5,23 +5,52 @@ var util       = require('util');
 var Tract = require('../models').Tract;
 
 exports.importTracts = function() {
-  Tract.remove({}, function(err) {
-    if (err) console.log(err);
-    else {
-      var tracts = require('../data/census/tract.json');
-      tracts.features.forEach(function(tract) {
-        newTract = new Tract({
-          tractId: tract.properties.GEOID10,
-          loc: {
-            type:         tract.geometry.type,
-            coordinates:  tract.geometry.coordinates
-          }
+  var metadata;
+
+  var tractsJsonImport = function(done) {
+    Tract.remove({}, function(err) {
+      if (err) console.log(err);
+      else {
+        var tracts = require('../data/census/tract.json');
+        var total = tracts.features.length;
+        var soFar = 0;
+        tracts.features.forEach(function(tract) {
+          newTract = new Tract({
+            tractId: tract.properties.GEOID10,
+            loc: {
+              type:         tract.geometry.type,
+              coordinates:  tract.geometry.coordinates
+            }
+          });
+          newTract.save(function(err) {
+            soFar++;
+            if (soFar === total) {
+              console.log('Done importing geocoordinates');
+              done();
+            } else {
+              console.log('Imported ' + soFar);
+            }
+          });
         });
-        newTract.save(function(err) {
-          if (err) return console.log(err);
-          return console.log(newTract);
-        });
-      });
-    }
-  });
+      }
+    });
+  }
+
+  var metadataImport = function(done) {
+    metadata = require('../data/census/sf1_labels.json');
+    console.log('done importing metadata');
+    done();
+  }
+
+  var populationImport = function(done) {
+  }
+
+  var averageHouseholdSizesByAgeImport = function(done) {
+  }
+
+  var gendersByAgeImport = function(done) {
+  }
+
+  async.series([/*tractsJsonImport,*/ metadataImport])
+
 };
