@@ -98,14 +98,23 @@ define([
 
   var results = [];
   Streamable.get('/tracts',  {
-      onData:  function(data) { 
+      onData:  function(data) {
         parsed = JSON.parse(data);
         //console.log(parsed.loc.coordinates[0].length);
+        var tract = [{
+    "type": "Feature",
+    "properties": {},
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": parsed.loc.coordinates
+    }
+}];
+        var geoj = L.geoJson(tract).addTo(map);
         results.push(parsed.loc.coordinates[0].length);
       },
       onError: function(e) { console.log(e); },
-      onEnd:   function() { 
-        console.log('all done'); 
+      onEnd:   function() {
+        console.log('all done');
         console.log(_.max(results));
       }
     });
