@@ -97,7 +97,13 @@ define([
   });
 
   Streamable.get('/tracts',  {
-      onData:  function(data) { console.log(data); },
+      onData:  function(data) { 
+        parsed = JSON.parse(data);
+        console.log(parsed.loc);
+        /*for (var key in data) {
+          console.log(key); 
+        }*/
+      },
       onError: function(e) { console.log(e); },
       onEnd:   function() { console.log('all done'); }
     });
