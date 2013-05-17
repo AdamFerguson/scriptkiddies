@@ -1,10 +1,6 @@
 var Tract     = require('../models').Tract;
+var streamable = require('../app').streamable;
 
-exports.list = function(req, res) {
-  Tract.find({}, function(err,tracts) {
-    if (err) res.status(500).send(err);
-    else {
-      res.send(tracts);
-    }
-  });
-};
+exports.list = [streamable, function(req, res) {
+  Tract.find({}).stream().pipe(res);
+}];
