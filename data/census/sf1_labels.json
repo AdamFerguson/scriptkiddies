@@ -1,40 +1,40 @@
 {
   "P39B": {
-    "name": "FAMILY TYPE BY PRESENCE AND AGE OF RELATED CHILDREN (BLACK OR AFRICAN AMERICAN ALONE HOUSEHOLDER)", 
-    "universe": "Families with a householder who is Black or African American alone", 
+    "name": "FAMILY TYPE BY PRESENCE AND AGE OF RELATED CHILDREN (BLACK OR AFRICAN AMERICAN ALONE HOUSEHOLDER)",
+    "universe": "Families with a householder who is Black or African American alone",
     "labels": {
       "P039B011": {
-        "indent": 4, 
-        "parent": "P039B010", 
-        "text": "Under 6 years only", 
-        "has_children": false, 
-        "key": "P039B011", 
+        "indent": 4,
+        "parent": "P039B010",
+        "text": "Under 6 years only",
+        "has_children": false,
+        "key": "P039B011",
         "key_2000": null
-      }, 
+      },
       "P039B010": {
-        "indent": 3, 
-        "parent": "P039B009", 
-        "text": "With related children under 18 years:", 
-        "has_children": true, 
-        "key": "P039B010", 
+        "indent": 3,
+        "parent": "P039B009",
+        "text": "With related children under 18 years:",
+        "has_children": true,
+        "key": "P039B010",
         "key_2000": null
-      }, 
+      },
       "P039B013": {
-        "indent": 4, 
-        "parent": "P039B010", 
-        "text": "6 to 17 years only", 
-        "has_children": false, 
-        "key": "P039B013", 
+        "indent": 4,
+        "parent": "P039B010",
+        "text": "6 to 17 years only",
+        "has_children": false,
+        "key": "P039B013",
         "key_2000": null
-      }, 
+      },
       "P039B012": {
-        "indent": 4, 
-        "parent": "P039B010", 
-        "text": "Under 6 years and 6 to 17 years", 
-        "has_children": false, 
-        "key": "P039B012", 
+        "indent": 4,
+        "parent": "P039B010",
+        "text": "Under 6 years and 6 to 17 years",
+        "has_children": false,
+        "key": "P039B012",
         "key_2000": null
-      }, 
+      },
       "P039B015": {
         "indent": 2, 
         "parent": "P039B008", 
