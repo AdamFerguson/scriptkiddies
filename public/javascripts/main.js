@@ -35,4 +35,4 @@ require.config({
   }
 });
 
-require(['app', 'map_controller'], function(app) { debugger; });
+require(['app'], function(app) {  });
