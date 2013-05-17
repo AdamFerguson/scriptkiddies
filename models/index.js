@@ -4,4 +4,4 @@ mongoose.connect('mongodb://localhost/scriptkiddies');
 
 exports.Store     = require('./store');
 exports.Household = require('./household');
-exports.Tract = require('./Tract');
+exports.Tract = require('./tract');

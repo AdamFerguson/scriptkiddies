@@ -39,29 +39,46 @@ define([
           layers: [minimal,googleclone]
     });
 
-  var locationFilter = new L.LocationFilter().addTo(map);
+  // var locationFilter = new L.LocationFilter().addTo(map);
 
-  locationFilter.on('change', function(e) {
-    var ne = e.bounds.getNorthEast();
-    var sw = e.bounds.getSouthWest();
-    var reqData = {params: {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng}};
-    Streamable.get('/households/search/bounds', reqData, {
-      onData:  function(data) { console.log(data); },
-      onError: function(e) { console.log(e); },
-      onEnd:   function() { console.log('all done'); }
-    });
-    // promise.done(function(data,status,jqXHR) {
-    //   console.log(data,status,jqXHR);
-    // });
-    // promise.fail(function(data,status,jqXHR) {
-    //   console.log(data,status,jqXHR);
-    // });
-  });
+  // locationFilter.on('change', function(e) {
+  //   var ne = e.bounds.getNorthEast();
+  //   var sw = e.bounds.getSouthWest();
+  //   var reqData = {params: {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng}};
+  //   Streamable.get('/households/search/bounds', reqData, {
+  //     onData:  function(data) { console.log(data); },
+  //     onError: function(e) { console.log(e); },
+  //     onEnd:   function() { console.log('all done'); }
+  //   });
+  //   // promise.done(function(data,status,jqXHR) {
+  //   //   console.log(data,status,jqXHR);
+  //   // });
+  //   // promise.fail(function(data,status,jqXHR) {
+  //   //   console.log(data,status,jqXHR);
+  //   // });
+  // });
 
   var base =  {
       "Minimal": minimal,
       "Google Clone": googleclone
   };
+
+//   var teeterList = [];
+//   var stores= [];
+// Streamable.get('/stores',  {
+//       onData:  function(data) {
+//         console.log(data);
+//       var desc = "Harris Teeter #" + val.storeId;
+//       var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon},{title: val.storeId}).bindLabel(desc);
+//       teeter.on('click', onMarkerClick);
+//       teeterList.push(teeter);
+//     },
+//       onError: function(e) { console.log(e); },
+//       onEnd:   function() { console.log('all done');
+//       var teeters = L.layerGroup(teeterList);
+//       var overlays = {"Harris Teeters": teeters};
+//       L.control.layers(base,overlays).addTo(map);}
+//     });
 
   var teeterList = [];
   var stores= [];
@@ -70,7 +87,7 @@ define([
     $.each(data, function(key, val) {
       var desc = "Harris Teeter #" + val.storeId;
       var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon},{title: val.storeId}).bindLabel(desc);
-      // teeter.on('click', onMarkerClick);
+       teeter.on('click', onMarkerClick);
       teeterList.push(teeter);
     });
     var teeters = L.layerGroup(teeterList);
@@ -79,27 +96,46 @@ define([
     L.control.layers(base,overlays).addTo(map);
   });
 
+  Streamable.get('/tracts',  {
+      onData:  function(data) { console.log(data); },
+      onError: function(e) { console.log(e); },
+      onEnd:   function() { console.log('all done'); }
+    });
 
-  // var markers = new L.MarkerClusterGroup();
-  // function onMarkerClick(e) {
-  //    $.each(stores, function(key, val) {
-  //       console.log(e);
-  //       if( val.loc[1] == e.target._latlng.lat && val.loc[0] == e.target._latlng.lng){
-  //       var markerList = [];
-  //       var storeurl = '/stores/' + val.storeId + '/households';
-  //       $.getJSON(storeurl, function(data) {
-  //          $.each(data, function(key, val) {
-  //            var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
-  //            markerList.push(marker);
-  //          });
-  //           //Why does this work here
-  //           markers.clearLayers();
-  //           markers.addLayers(markerList);
-  //           map.addLayer(markers);
-  //        });
-  //     }
-  //   });
-  // }
+  var markers = new L.MarkerClusterGroup();
+  function onMarkerClick(e) {
+     $.each(stores, function(key, val) {
+        console.log(e);
+        if( val.loc[1] == e.target._latlng.lat && val.loc[0] == e.target._latlng.lng){
+        var markerList = [];
+        var storeurl = '/stores/' + val.storeId + '/households';
+        $.getJSON(storeurl, function(data) {
+           $.each(data, function(key, val) {
+             var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
+             markerList.push(marker);
+           });
+            markers.clearLayers();
+            markers.addLayers(markerList);
+            map.addLayer(markers);
+         });
+      }
+    });
+  }
+
+
+  // var tracts = [];
+  //  $.getJSON('/tracts', function(data) {
+  //   console.log(data)
+  //   // $.each(data, function(key, val) {
+  //   // //  console.log(val.loc.coordinates);
+  //   //   var polygon = L.polygon([val.loc.coordinates[0]]).bindLabel(val.tractId);
+  //   //  // teeter.on('click', onMarkerClick);
+  //   //  tracts.push(polygon);
+  //   // });
+  //   // var tractlayer = L.layerGroup(tracts);
+  //   // var overlays = {"Census Tracts": tractlayer};
+  //   // L.control.layers(base,overlays).addTo(map);
+  // });
 
   // Themes:
   // - Dark Blue: 67367

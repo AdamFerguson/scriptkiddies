@@ -2,6 +2,7 @@ var routes = require('./routes/index'),
     user = require('./routes/user'),
     store = require('./routes/store'),
     household = require('./routes/household');
+    tract = require('./routes/tract');
 
 module.exports = function(app) {
 
@@ -11,4 +12,5 @@ module.exports = function(app) {
   app.get('/stores', store.list);
   app.get('/households/search/bounds', household.searchByBounds);
   app.get('/households', household.list);
+  app.get('/tracts', tract.list);
 };
