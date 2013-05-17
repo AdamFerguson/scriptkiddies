@@ -37,6 +37,8 @@ var tractSchema = mongoose.Schema({
 });
 
 tractSchema.index({loc: '2dsphere'});
+var searchByBounds = require('../lib/search_utils').searchByBounds;
 
+tractSchema.static('searchByBounds', searchByBounds);
 
 var Tract = module.exports = mongoose.model('Tract', tractSchema);

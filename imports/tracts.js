@@ -43,6 +43,18 @@ exports.importTracts = function() {
   }
 
   var populationImport = function(done) {
+    var total, soFar;
+
+    csv().
+      from.path(__dirname+'/../data/census/all_140_in_37.P35.csv', {columns: true}).
+      on('record', function(row, index) {
+        total++;
+        Tract.findOne({tractId: row.GEOID}, function(err,tract) {
+          if (err) console.log(err);
+          else {
+          }
+        });
+      });
   }
 
   var averageHouseholdSizesByAgeImport = function(done) {

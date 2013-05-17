@@ -100,15 +100,14 @@ define([
   Streamable.get('/tracts',  {
       onData:  function(data) {
         parsed = JSON.parse(data);
-        //console.log(parsed.loc.coordinates[0].length);
         var tract = [{
-    "type": "Feature",
-    "properties": {},
-    "geometry": {
-        "type": "Polygon",
-        "coordinates": parsed.loc.coordinates
-    }
-}];
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": parsed.loc.coordinates
+            }
+        }];
         var geoj = L.geoJson(tract).addTo(map);
         results.push(parsed.loc.coordinates[0].length);
       },
