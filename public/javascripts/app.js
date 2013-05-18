@@ -108,8 +108,8 @@ define([
                 "coordinates": parsed.loc.coordinates
             }
         }];
-        var geoj = L.geoJson(tract).addTo(map);
-        results.push(parsed.loc.coordinates[0].length);
+        var geoj = L.geoJson(tract);
+        results.push(geoj);
       },
       onError: function(e) { console.log(e); },
       onEnd:   function() {
