@@ -2,7 +2,6 @@
 define([
        'jquery',
        'angular',
-       'foundation',
        'leaflet',
        'd3',
        'underscore',
@@ -35,7 +34,7 @@ define([
 
   var map = new L.Map("map", {
           center: [35.227087, -80.843127],
-          zoom: 11,
+          zoom: 10,
           layers: [minimal,googleclone]
     });
 
@@ -86,13 +85,18 @@ define([
           };
         },
         onEachFeature: function(feature, layer) {
-          layer.on('click', function(e) {
+          layer.on({
+              mouseover: highlightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature
+          });
+          /*layer.on('click', function(e) {
             // e contains properties:
             // latlng, corresponds to L.LatLng coordinate clicked on map
             // containerPoint, L.Point
             // layerPoint, L.Point
             layer.setStyle({fillOpacity: 0.8});
-          });
+          });*/
         }
       }).addTo(map);
 
@@ -102,15 +106,47 @@ define([
     });
   });
 
+
+function calcArea(coordinates){
+  return  _.map(coordinates, function(entry) {
+    return _.reduce(entry, function(list, polygon) {
+        _.each(_.map(polygon, function(point) {
+            return new google.maps.LatLng(point[1], point[0]);
+        }), function(point) {
+            list.push(point);
+    });
+        var area = google.maps.geometry.spherical.computeArea(list) / 2589988;
+        return area;
+    }, []);
+})
+};
+
+var geojson;
+var info = L.control();
+info.onAdd = function (map) {
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this.update();
+    return this._div;
+};
+
+// method that we will use to update the control based on feature properties passed
+info.update = function (props) {
+    this._div.innerHTML = '<h4>NC Census Tract Population Density</h4>' +  (props ?
+        '<b>' + '</b>' + props.density + ' people / mi<sup>2</sup>'
+        : 'Hover over an area');
+};
+
+info.addTo(map);
+
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
       try {
-        var area = parsed.area;
+        var area = calcArea([parsed.loc.coordinates]);
         var totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
         var totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
         var populationDensity2000 = totalPop2000 / area;
-        var populationDensity2010 = totalPop2010 / area * 1000;
+        var populationDensity2010 = totalPop2010 / area;
       }
       catch(exception) {
         console.log(exception);
@@ -133,7 +169,7 @@ define([
           "coordinates": parsed.loc.coordinates
         }
       }];
-
+      //geojson = L.geoJson(tract, {style: style, onEachFeature: onEachFeature}).addTo(map);
       myLayer.addData(tract);
     },
     onError: function(e) { console.log(e); },
@@ -153,14 +189,45 @@ define([
     }
   });
 
+function highlightFeature(e) {
+    var layer = e.target;
+    info.update(layer.feature.properties);
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+}
+
+function resetHighlight(e) {
+    geojson.resetStyle(e.target);
+    info.update();
+}
+
+function zoomToFeature(e) {
+    map.fitBounds(e.target.getBounds());
+}
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
 function getColor(d) {
-    return d > 10000 ? '#800026' :
-           d > 8000  ? '#BD0026' :
-           d > 6000  ? '#E31A1C' :
-           d > 4000  ? '#FC4E2A' :
-           d > 2000   ? '#FD8D3C' :
-           d > 1000   ? '#FEB24C' :
-           d > 1   ? '#FED976' :
+    return d > 5000 ? '#800026' :
+           d > 3000  ? '#BD0026' :
+           d > 2000  ? '#E31A1C' :
+           d > 1000  ? '#FC4E2A' :
+           d > 800   ? '#FD8D3C' :
+           d > 600   ? '#FEB24C' :
+           d > 300   ? '#FED976' :
                       '#FFEDA0';
 }
 
