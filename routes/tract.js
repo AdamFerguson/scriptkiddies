@@ -7,8 +7,8 @@ exports.list = [streamable, function(req, res) {
   var latLow  = 34.817186;
   var latHigh = 35.756543;
   //Tract.searchByBounds(latHigh,lngHigh,latLow,lngLow).stream({ transform: JSON.stringify }).pipe(res);
-  //Tract.find().stream({ transform: JSON.stringify }).pipe(res);
-  var geojsonPoly = { type: 'Polygon', coordinates: [[
+  Tract.find({}, {tractId: 1, loc: 1}).stream({ transform: JSON.stringify }).pipe(res);
+  /*var geojsonPoly = { type: 'Polygon', coordinates: [[
     [lngLow, latLow],
     [lngHigh, latLow],
     [lngHigh, latHigh],
@@ -22,4 +22,5 @@ exports.list = [streamable, function(req, res) {
   			$geometry: geojsonPoly 
   		}}
   	}, undefined, { batchSize: 1000}).stream({transform: JSON.stringify}).pipe(res);
+  */
 }];
