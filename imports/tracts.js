@@ -3,6 +3,7 @@ var csv        = require('csv');
 var util       = require('util');
 
 var Tract = require('../models').Tract;
+var Household = require('../models').Household;
 
 exports.importTracts = function() {
   var metadata;
@@ -14,21 +15,29 @@ exports.importTracts = function() {
         var tracts = require('../data/census/tract.json');
         var total = tracts.features.length;
         var soFar = 0;
+        var totalImported = 0;
         tracts.features.forEach(function(tract) {
-          newTract = new Tract({
-            tractId: tract.properties.GEOID10,
-            loc: {
-              type:         tract.geometry.type,
-              coordinates:  tract.geometry.coordinates
-            }
-          });
-          newTract.save(function(err) {
+          var data = {
+            type: tract.geometry.type,
+            coordinates: tract.geometry.coordinates
+          }
+          Household.find({loc: {$within: {$geometry: data}}}, function(err, households) {
             soFar++;
+            if (households && households.length > 0) {
+              newTract = new Tract({
+                tractId: tract.properties.GEOID10,
+                loc: {
+                  type:         tract.geometry.type,
+                  coordinates:  tract.geometry.coordinates
+                }
+              });
+              newTract.save(function(err) {
+                  totalImported++;
+                  console.log('Imported ' + totalImported);
+              });
+            }
             if (soFar === total) {
-              console.log('Done importing geocoordinates');
               done();
-            } else {
-              console.log('Imported ' + soFar);
             }
           });
         });
@@ -131,6 +140,7 @@ exports.importTracts = function() {
           if (soFar === total) {
             console.log('done importing Average Household Size');
             done();
+            process.exit();
           }
         });
       });

@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 var tractSchema = mongoose.Schema({
   tractId: { type: Number, index: true, unique: true },
-  loc: { type: { type: String }, coordinates: mongoose.Schema.Types.Mixed },
+  loc: { type: mongoose.Schema.Types.Mixed },
   totalPopulations: [{
     year: { type: Number, index: true },
     count: { type: Number }

@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 
 var householdSchema = mongoose.Schema({
   householdId: { type: Number, index: true, unique: true },
-  // loc: { type: { type: String }, coordinates: [Number]},
-  loc: { type: [Number] },
+  loc: { type: mongoose.Schema.Types.Mixed},
+  //loc: { type: [Number] },
   transactions: [{
     date:        {type: Date, index: true},
     netSales:    {type: Number},
