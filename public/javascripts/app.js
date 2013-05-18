@@ -2,7 +2,6 @@
 define([
        'jquery',
        'angular',
-       'foundation',
        'leaflet',
        'd3',
        'underscore',
@@ -86,13 +85,39 @@ function style(feature) {
     };
 };
 
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
+  var myLayer = L.geoJson(null,{
+        style: function(feature) {
+          return {
+              fillColor: getColor(feature.properties.pop),
+              weight: 2,
+              opacity: 1,
+              color: 'white',
+              dashArray: '3',
+              fillOpacity: 0.4
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          layer.on({
+              mouseover: highlightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature
+          });
+          /*layer.on('click', function(e) {
+            // e contains properties:
+            // latlng, corresponds to L.LatLng coordinate clicked on map
+            // containerPoint, L.Point
+            // layerPoint, L.Point
+            layer.setStyle({fillOpacity: 0.8});
+          });*/
+        }
+      }).addTo(map);
+
+  $('#clear-search').on('click', function(e) {
+    myLayer.eachLayer(function(layer) {
+      layer.setStyle({fillOpacity: 0.4});
     });
-}
+  });
+
 
 function calcArea(coordinates){
   return  _.map(coordinates, function(entry) {
@@ -126,9 +151,7 @@ info.update = function (props) {
 info.addTo(map);
 
 var legend = L.control({position: 'bottomright'});
-
 legend.onAdd = function (map) {
-
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000],
         labels = [];
@@ -141,8 +164,8 @@ legend.onAdd = function (map) {
 
     return div;
 };
-
 legend.addTo(map);
+
 
   var totalTractIds = 0;
   Streamable.get('/tracts',  {
@@ -158,14 +181,13 @@ legend.addTo(map);
       catch(exception) {
         console.log(exception);
       }
-      if (totalTractIds < 5) {
-        totalTractIds++;
-        results.push(parsed.tractId);
-      }
 
+      //results.push(parsed.tractId);
+      //results.push(totalPop2010);
       var tract = [{
         "type": "Feature",
         "properties": {
+          tractId: parsed.tractId,
           'Population 2010': totalPop2010,
           'pop': totalPop2000,
           'Area'           : area,
@@ -177,12 +199,13 @@ legend.addTo(map);
           "coordinates": parsed.loc.coordinates
         }
       }];
-      geojson = L.geoJson(tract, {style: style, onEachFeature: onEachFeature}).addTo(map);
+      //geojson = L.geoJson(tract, {style: style, onEachFeature: onEachFeature}).addTo(map);
+      myLayer.addData(tract);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
       console.log('all done');
-      var options = {params: {tractIds: results.join(',')}};
+      /*var options = {params: {tractIds: results.join(',')}};
       Streamable.get('/households/search/tracts', options, {
         onData: function(data) {
           console.log(JSON.parse(data));
@@ -190,7 +213,9 @@ legend.addTo(map);
         onError: function(err) {
           console.log(err);
         }
-      })
+      });*/
+      //console.log(_.max(results));
+      //console.log(_.sortBy(results, function(num) { return num; }));
     }
   });
 
@@ -203,14 +228,13 @@ function highlightFeature(e) {
         dashArray: '',
         fillOpacity: 0.7
     });
-
     if (!L.Browser.ie && !L.Browser.opera) {
         layer.bringToFront();
     }
 }
 
 function resetHighlight(e) {
-    geojson.resetStyle(e.target);
+    myLayer.resetStyle(e.target);
     info.update();
 }
 
