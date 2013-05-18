@@ -2,13 +2,12 @@ var async      = require('async');
 var csv        = require('csv');
 var util       = require('util');
 var geoUtil    = require('geojson-utils');
-//var math       = require('math')
 
 var Tract = require('../models').Tract;
 var Household = require('../models').Household;
 
 exports.importTracts = function() {
-  var metadata;
+  var metadata = require('../data/census/sf1_labels.json');
 
   var tractsJsonImport = function(done) {
     Tract.remove({}, function(err) {
@@ -47,12 +46,6 @@ exports.importTracts = function() {
         });
       }
     });
-  };
-
-  var metadataImport = function(done) {
-    metadata = require('../data/census/sf1_labels.json');
-    console.log('done importing metadata');
-    done();
   };
 
   var familiesImport = function(done) {
@@ -144,15 +137,84 @@ exports.importTracts = function() {
           if (soFar === total) {
             console.log('done importing Average Household Size');
             done();
-            process.exit();
           }
         });
       });
   };
 
   var gendersByAgeImport = function(done) {
+    var total = 0, soFar = 0, genderMetadata = metadata['P12']['labels'];
+    var rangePattern = /^(\d+)\s?(to|and)?\s?(\d+)?/;
+    var lowerKeyFemale     = 'P012027';
+    var lowerKeyMale       = 'P012003';
+    var upperKeyFemale     = 'P012049';
+    var upperKeyMale       = 'P012025';
+    var femaleKey          = 'P012026';
+    var maleKey            = 'P012002';
+
+    csv().
+      from.path(__dirname+'/../data/census/all_140_in_37.P12.csv', {columns: true}).
+      on('record', function(row, index) {
+        total++;
+        var keys = [];
+        var data = {gendersByAge: []};
+        for (var i = 2; i <= 49; i++) {
+          if (i < 10) keys.push('P01200' + i);
+          else keys.push('P0120' + i);
+        }
+
+        for (var x = 0; x < keys.length; x++) {
+          var minAge, maxAge, gender, year, key = keys[x];
+
+          // break if one of the gender keys
+          if (genderMetadata[key]['parent'] === 'P012001') continue;
+
+          if (key === lowerKeyFemale || key === lowerKeyMale) { minAge = 0; maxAge = 4; }
+          else if (key === upperKeyFemale || key === upperKeyMale) { minAge = 85; }
+          else {
+            var matches = genderMetadata[key]['text'].match(rangePattern);
+            minAge = matches[1];
+            maxAge = matches[3];
+            if (genderMetadata[key]['parent'] === maleKey) {
+              gender = 'male';
+            } else {
+              gender = 'female';
+            }
+
+            data.gendersByAge.push({
+              year: 2000,
+              gender: gender,
+              ageRange: {
+                minAge: minAge, 
+                maxAge: maxAge
+              },
+              count: row[key + '.2000']
+            });
+            data.gendersByAge.push({
+              year: 2010,
+              gender: gender,
+              ageRange: {minAge: minAge, maxAge: maxAge},
+              count: row[key]
+            });
+          }
+        }
+
+        Tract.update({tractId: row.GEOID}, data, function(err,tract) {
+          soFar++;
+          if (err) console.log(err);
+          else {
+            console.log('Gender by Age import: ' + soFar);
+          }
+
+          if (soFar === total) {
+            console.log('done importing Gender by Age');
+            done();
+            process.exit();
+          }
+        });
+      });
   };
 
-  async.series([tractsJsonImport, metadataImport, familiesImport, averageHouseholdSizesByAgeImport]);
+  async.series([tractsJsonImport, familiesImport, averageHouseholdSizesByAgeImport, gendersByAgeImport]);
 
 };
