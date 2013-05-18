@@ -76,28 +76,24 @@ define([
   var tracts;
   var myLayer = L.geoJson(null,{
         style: function(feature) {
-          var totalPop   = feature.properties['Population 2010'];
-          var popDensity = feature.properties['Pop Density 2010'];
-          var blueHex;
-          try {
-            // precalculated
-            // max pop: 13750
-            // min pop: 368
-            // max pop density: 51366172.487773284
-            // min pop density: 892.1236703140514
-            var blueDecimal = ((popDensity / 51400000) * 255);
-            blueHex = parseInt(blueDecimal, 10).toString(16).substr(0,2);
-            if (blueHex.length === 1) blueHex = '0' + blueHex;
-          }
-          catch(exception) {
-            blueHex = '33';
-          }
           return {
-            weight: 1,
-            color: '#333333',
-            fillColor: '#' + blueHex + blueHex + blueHex,
-            fillOpacity: 0.4
-          }
+              fillColor: getColor(feature.properties.pop),
+              weight: 2,
+              opacity: 1,
+              color: 'white',
+              dashArray: '3',
+              fillOpacity: 0.4
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          layer.on('click', function(e) {
+            // e contains properties:
+            // latlng, corresponds to L.LatLng coordinate clicked on map
+            // containerPoint, L.Point
+            // layerPoint, L.Point
+            console.log(layer, feature);
+            layer.setStyle({fillOpacity: 0.8});
+          });
         }
       }).addTo(map);
 
@@ -120,16 +116,6 @@ define([
         totalTractIds++;
         results.push(parsed.tractId);
       }
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.pop),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
-    };
-}
       //results.push(totalPop2010);
       var tract = [{
         "type": "Feature",
@@ -146,8 +132,7 @@ function style(feature) {
         }
       }];
 
-      L.geoJson(tract, {style: style}).addTo(map);
-     // myLayer.addData(tract);
+      myLayer.addData(tract);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
@@ -167,7 +152,6 @@ function style(feature) {
   });
 
 function getColor(d) {
-    console.log(d);
     return d > 10000 ? '#800026' :
            d > 8000  ? '#BD0026' :
            d > 6000  ? '#E31A1C' :
