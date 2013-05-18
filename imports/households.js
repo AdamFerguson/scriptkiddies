@@ -22,7 +22,7 @@ exports.importHouseholds = function() {
 
           house = new Household({
             householdId: row.HOUSEHOLD_NUM,
-            loc: {type: 'Point', coordinates: [row.HOUSE_LONGITUDE, row.HOUSE_LATITUDE]},
+            loc: {type: 'Point', coordinates: [parseFloat(row.HOUSE_LONGITUDE), parseFloat(row.HOUSE_LATITUDE)]},
             //loc: [row.HOUSE_LONGITUDE, row.HOUSE_LATITUDE],
             transactions: [createTransaction(row)]
           });
