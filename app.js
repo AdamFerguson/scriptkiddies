@@ -28,6 +28,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
+app.use(express.basicAuth('kiddy', 'script'));
 app.use(app.router);
 app.use(stylus.middleware({
   src: __dirname + '/public',
