@@ -8,4 +8,7 @@ a {
   margin-left: 75px;
   width: 500px;
   height: 500px;
+  margin-bottom: 100px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
 }
