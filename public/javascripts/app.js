@@ -39,18 +39,18 @@ define([
           layers: [minimal,googleclone]
     });
 
-  var locationFilter = new L.LocationFilter().addTo(map);
+  // var locationFilter = new L.LocationFilter().addTo(map);
 
-  locationFilter.on('change', function(e) {
-    var ne = e.bounds.getNorthEast();
-    var sw = e.bounds.getSouthWest();
-    var reqData = {params: {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng}};
-    Streamable.get('/households/search/bounds', reqData, {
-      onData:  function(data) { console.log(data); },
-      onError: function(e) { console.log(e); },
-      onEnd:   function() { console.log('all done'); }
-    });
-  });
+  // locationFilter.on('change', function(e) {
+  //   var ne = e.bounds.getNorthEast();
+  //   var sw = e.bounds.getSouthWest();
+  //   var reqData = {params: {neLat: ne.lat, neLng: ne.lng, swLat: sw.lat, swLng: sw.lng}};
+  //   Streamable.get('/households/search/bounds', reqData, {
+  //     onData:  function(data) { console.log(data); },
+  //     onError: function(e) { console.log(e); },
+  //     onEnd:   function() { console.log('all done'); }
+  //   });
+  // });
 
   var base =  {
       "Minimal": minimal,
@@ -83,7 +83,7 @@ define([
             // precalculated
             // max pop: 13750
             // min pop: 368
-            // max pop density: 51366172.487773284 
+            // max pop density: 51366172.487773284
             // min pop density: 892.1236703140514
             var blueDecimal = ((popDensity / 51400000) * 255);
             blueHex = parseInt(blueDecimal, 10).toString(16).substr(0,2);
@@ -109,36 +109,60 @@ define([
         var totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
         var totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
         var populationDensity2000 = totalPop2000 / area;
-        var populationDensity2010 = totalPop2010 / area;
-      } 
+        var populationDensity2010 = totalPop2010 / area * 1000;
+      }
       catch(exception) {
         console.log(exception);
       }
 
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.pop),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
       //results.push(totalPop2010);
       var tract = [{
         "type": "Feature",
         "properties": {
           'Population 2010': totalPop2010,
-          'Population 2000': totalPop2000,
+          'pop': totalPop2000,
           'Area'           : area,
           'Pop Density 2000': populationDensity2000,
-          'Pop Density 2010': populationDensity2010
+          'density': populationDensity2010
         },
         "geometry": {
           "type": "Polygon",
           "coordinates": parsed.loc.coordinates
         }
       }];
-      myLayer.addData(tract);
+
+      L.geoJson(tract, {style: style}).addTo(map);
+     // myLayer.addData(tract);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
-      console.log('all done');
+      console.log('all done');1
       //console.log(_.max(results));
       //console.log(_.sortBy(results, function(num) { return num; }));
     }
   });
+
+function getColor(d) {
+    console.log(d);
+    return d > 10000 ? '#800026' :
+           d > 8000  ? '#BD0026' :
+           d > 6000  ? '#E31A1C' :
+           d > 4000  ? '#FC4E2A' :
+           d > 2000   ? '#FD8D3C' :
+           d > 1000   ? '#FEB24C' :
+           d > 1   ? '#FED976' :
+                      '#FFEDA0';
+}
 
 
   var overlays = {"Harris Teeters": teeters};
