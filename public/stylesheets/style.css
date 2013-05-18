@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 a {
@@ -8,6 +7,10 @@ a {
 #map {
   width: 800px;
   height: 800px;
+  margin-left: 75px;
+  margin-bottom: 100px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
 }
 .info {
     padding: 6px 8px;

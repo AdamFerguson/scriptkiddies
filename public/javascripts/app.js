@@ -122,6 +122,7 @@ info.update = function (props) {
 };
 
 info.addTo(map);
+  var totalTractIds = 0;
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
@@ -135,8 +136,10 @@ info.addTo(map);
       catch(exception) {
         console.log(exception);
       }
-
-     // results.push(totalPop2010);
+      if (totalTractIds < 5) {
+        totalTractIds++;
+        results.push(parsed.tractId);
+      }
       var tract = [{
         "type": "Feature",
         "properties": {
@@ -151,12 +154,20 @@ info.addTo(map);
           "coordinates": parsed.loc.coordinates
         }
       }];
-
       geojson = L.geoJson(tract, {style: style, onEachFeature: onEachFeature}).addTo(map);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
       console.log('all done');
+      var options = {params: {tractIds: results.join(',')}};
+      Streamable.get('/households/search/tracts', options, {
+        onData: function(data) {
+          console.log(JSON.parse(data));
+        },
+        onError: function(err) {
+          console.log(err);
+        }
+      })
     }
   });
 
