@@ -96,6 +96,8 @@ define([
   var teeters = L.layerGroup(teeterList);
   var results = [];
   var tracts;
+  var myLayer = L.geoJson().addTo(map);
+
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
@@ -107,13 +109,14 @@ define([
           "coordinates": parsed.loc.coordinates
         }
       }];
-      var tract = L.geoJson(tract);
-      results.push(tract);
+      myLayer.addData(tract);
+     // var tract = L.geoJson(tract);
+      //results.push(tract);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
-      console.log(results);
-      tracts = L.featureGroup(results).addTo(map);
+    //  console.log(results);
+    //  tracts = L.layerGroup(results).addTo(map);
       console.log('all done');
     }
   });
