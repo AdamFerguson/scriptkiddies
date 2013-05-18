@@ -86,9 +86,26 @@ define([
         },
         onEachFeature: function(feature, layer) {
           layer.on({
-              mouseover: highlightFeature,
-              mouseout: resetHighlight,
-              click: zoomToFeature
+              mouseover: function highlightFeature(e) {
+                            info.update(layer.feature.properties);
+                            layer.setStyle({
+                                weight: 2,
+                                color: '#666',
+                                dashArray: '',
+                                fillOpacity: 0.7
+                            });
+
+                            if (!L.Browser.ie && !L.Browser.opera) {
+                                layer.bringToFront();
+                            }
+                        },
+              mouseout: function resetHighlight(e) {
+                          myLayer.resetStyle(e.target);
+                          info.update();
+                        },
+              click: function zoomToFeature(e) {
+                  map.fitBounds(e.target.getBounds());
+              }
           });
           /*layer.on('click', function(e) {
             // e contains properties:
@@ -189,47 +206,21 @@ info.addTo(map);
     }
   });
 
-function highlightFeature(e) {
-    var layer = e.target;
-    info.update(layer.feature.properties);
-    layer.setStyle({
-        weight: 5,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-    });
-
-    if (!L.Browser.ie && !L.Browser.opera) {
-        layer.bringToFront();
-    }
-}
-
-function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-    info.update();
-}
 
 function zoomToFeature(e) {
     map.fitBounds(e.target.getBounds());
 }
 
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-    });
-}
-function getColor(d) {
-    return d > 5000 ? '#800026' :
-           d > 3000  ? '#BD0026' :
-           d > 2000  ? '#E31A1C' :
-           d > 1000  ? '#FC4E2A' :
-           d > 800   ? '#FD8D3C' :
-           d > 600   ? '#FEB24C' :
-           d > 300   ? '#FED976' :
-                      '#FFEDA0';
-}
+  function getColor(d) {
+      return d > 5000 ? '#800026' :
+             d > 3000  ? '#BD0026' :
+             d > 2000  ? '#E31A1C' :
+             d > 1000  ? '#FC4E2A' :
+             d > 800   ? '#FD8D3C' :
+             d > 600   ? '#FEB24C' :
+             d > 300   ? '#FED976' :
+                        '#FFEDA0';
+  }
 
 
   var overlays = {"Harris Teeters": teeters};
