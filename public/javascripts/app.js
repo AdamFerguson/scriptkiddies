@@ -76,10 +76,21 @@ define([
   var tracts;
   var myLayer = L.geoJson(null,{
         style: function(feature) {
-          debugger;
+          var totalPop = feature.properties['Population 2010'];
+          var blueHex;
+          try {
+            var blueDecimal = ((totalPop / 15000) * 255);
+            blueHex = parseInt(blueDecimal, 10).toString(16).substr(0,2);
+            if (blueHex.length === 1) blueHex = '0' + blueHex;
+          }
+          catch(exception) {
+            blueHex = '33';
+          }
           return {
             weight: 1,
-            'stroke-width': 1
+            color: '#333333',
+            fillColor: '#' + blueHex + blueHex + blueHex,
+            fillOpacity: 0.4
           }
         }
       }).addTo(map);
@@ -95,6 +106,7 @@ define([
         console.log(exception);
       }
 
+      results.push(totalPop2010);
       var tract = [{
         "type": "Feature",
         "properties": {
