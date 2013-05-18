@@ -35,7 +35,7 @@ define([
 
   var map = new L.Map("map", {
           center: [35.227087, -80.843127],
-          zoom: 10,
+          zoom: 11,
           layers: [minimal,googleclone]
     });
 
@@ -50,12 +50,6 @@ define([
       onError: function(e) { console.log(e); },
       onEnd:   function() { console.log('all done'); }
     });
-  //   // promise.done(function(data,status,jqXHR) {
-  //   //   console.log(data,status,jqXHR);
-  //   // });
-  //   // promise.fail(function(data,status,jqXHR) {
-  //   //   console.log(data,status,jqXHR);
-  //   // });
   });
 
   var base =  {
@@ -63,22 +57,6 @@ define([
       "Google Clone": googleclone
   };
 
-//   var teeterList = [];
-//   var stores= [];
-// Streamable.get('/stores',  {
-//       onData:  function(data) {
-//         console.log(data);
-//       var desc = "Harris Teeter #" + val.storeId;
-//       var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon},{title: val.storeId}).bindLabel(desc);
-//       teeter.on('click', onMarkerClick);
-//       teeterList.push(teeter);
-//     },
-//       onError: function(e) { console.log(e); },
-//       onEnd:   function() { console.log('all done');
-//       var teeters = L.layerGroup(teeterList);
-//       var overlays = {"Harris Teeters": teeters};
-//       L.control.layers(base,overlays).addTo(map);}
-//     });
 
   var teeterList = [];
   var stores= [];
@@ -96,34 +74,49 @@ define([
   var teeters = L.layerGroup(teeterList);
   var results = [];
   var tracts;
-  var myLayer = L.geoJson().addTo(map);
+  var myLayer = L.geoJson(null,{
+        style: function(feature) {
+          debugger;
+          return {
+            weight: 1,
+            'stroke-width': 1
+          }
+        }
+      }).addTo(map);
 
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
+      try {
+        var totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
+        var totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
+      } 
+      catch(exception) {
+        console.log(exception);
+      }
+
       var tract = [{
         "type": "Feature",
-        "properties": {},
+        "properties": {
+          'Population 2010': totalPop2010,
+          'Population 2000': totalPop2000
+        },
         "geometry": {
           "type": "Polygon",
           "coordinates": parsed.loc.coordinates
         }
       }];
       myLayer.addData(tract);
-     // var tract = L.geoJson(tract);
-      //results.push(tract);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
-    //  console.log(results);
-    //  tracts = L.layerGroup(results).addTo(map);
       console.log('all done');
     }
   });
 
 
-    var overlays = {"Harris Teeters": teeters};
-    L.control.layers(base,overlays).addTo(map);
+  var overlays = {"Harris Teeters": teeters};
+  L.control.layers(base,overlays).addTo(map);
 
   var markers = new L.MarkerClusterGroup();
   function onMarkerClick(e) {
@@ -145,20 +138,6 @@ define([
     });
   }
 
-
-  // var tracts = [];
-  //  $.getJSON('/tracts', function(data) {
-  //   console.log(data)
-  //   // $.each(data, function(key, val) {
-  //   // //  console.log(val.loc.coordinates);
-  //   //   var polygon = L.polygon([val.loc.coordinates[0]]).bindLabel(val.tractId);
-  //   //  // teeter.on('click', onMarkerClick);
-  //   //  tracts.push(polygon);
-  //   // });
-  //   // var tractlayer = L.layerGroup(tracts);
-  //   // var overlays = {"Census Tracts": tractlayer};
-  //   // L.control.layers(base,overlays).addTo(map);
-  // });
 
   // Themes:
   // - Dark Blue: 67367
