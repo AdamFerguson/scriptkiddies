@@ -99,7 +99,6 @@ define([
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
-      console.log(parsed);
       var tract = [{
         "type": "Feature",
         "properties": {},
@@ -110,7 +109,6 @@ define([
       }];
       var tract = L.geoJson(tract);
       results.push(tract);
-      console.log(results);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
