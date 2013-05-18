@@ -16,6 +16,11 @@ html
     script(src='javascripts/vendor/require.js', data-main='javascripts/main.js')
     script(src='javascripts/vendor/custom.modernizr.js')
   body
-    h1 HackathonCLT
-    block content
+    .fixed.container.top-bar
+      .name
+        h1
+          a(href='/').
+            HackathonCLT
+    .container
+      block content
 
