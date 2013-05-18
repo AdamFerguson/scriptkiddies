@@ -1,5 +1,10 @@
 extends layout
 
 block content
-  #map
-    leaflet(markers='markers', center='center')
+  .map-content
+    #map
+      leaflet(markers='markers', center='center')
+  #search-controls
+    button.medium.radius#clear-search Clear Search
+    form#search-controls.custom
+  .clearfix

@@ -9,8 +9,24 @@ a {
   height: 800px;
   margin-left: 75px;
   margin-bottom: 100px;
-  -webkit-border-radius: 20px;
-  border-radius: 20px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  float: left;
+}
+#search-controls {
+  margin-left: 25px;
+  float: left;
+}
+.clearfix {
+  zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
 }
 .info {
     padding: 6px 8px;

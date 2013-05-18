@@ -90,6 +90,14 @@ function style(feature) {
         dashArray: '3',
         fillOpacity: 0.7
     };
+};
+
+function onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlight,
+        click: zoomToFeature
+    });
 }
 
 function calcArea(coordinates){
@@ -140,6 +148,7 @@ info.addTo(map);
         totalTractIds++;
         results.push(parsed.tractId);
       }
+
       var tract = [{
         "type": "Feature",
         "properties": {
