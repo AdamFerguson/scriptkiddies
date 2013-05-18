@@ -1,5 +1,5 @@
-var Foursquare = require('./lib/foursquare');
-var Store      = require('./models').Store;
+var Foursquare = require('../lib/foursquare');
+var Store      = require('../models').Store;
 
 var util = require('util');
 
