@@ -21,6 +21,7 @@
   "devDependencies": {
     "async": "0.2.x",
     "benchmark": "1.0.x",
+    "geojson-utils": "0.2.x",
     "jake": "0.5.x",
     "prompt": "*",
     "underscore": "*"

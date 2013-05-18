@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var tractSchema = mongoose.Schema({
   tractId: { type: Number, index: true, unique: true },
   loc: { type: mongoose.Schema.Types.Mixed },
+  area: Number,
   totalPopulations: [{
     year: { type: Number, index: true },
     count: { type: Number }

@@ -1,6 +1,8 @@
 var async      = require('async');
 var csv        = require('csv');
 var util       = require('util');
+var geoUtil    = require('geojson-utils');
+//var math       = require('math')
 
 var Tract = require('../models').Tract;
 var Household = require('../models').Household;
@@ -21,6 +23,7 @@ exports.importTracts = function() {
             type: tract.geometry.type,
             coordinates: tract.geometry.coordinates
           }
+          var area = Math.abs(geoUtil.area(data));
           Household.find({loc: {$within: {$geometry: data}}}, function(err, households) {
             soFar++;
             if (households && households.length > 0) {
@@ -29,7 +32,8 @@ exports.importTracts = function() {
                 loc: {
                   type:         tract.geometry.type,
                   coordinates:  tract.geometry.coordinates
-                }
+                },
+                area: area
               });
               newTract.save(function(err) {
                   totalImported++;
