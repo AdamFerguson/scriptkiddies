@@ -91,13 +91,17 @@ define([
             // latlng, corresponds to L.LatLng coordinate clicked on map
             // containerPoint, L.Point
             // layerPoint, L.Point
-            console.log(layer, feature);
             layer.setStyle({fillOpacity: 0.8});
           });
         }
       }).addTo(map);
 
-  var totalTractIds = 0;
+  $('#clear-search').on('click', function(e) {
+    myLayer.eachLayer(function(layer) {
+      layer.setStyle({fillOpacity: 0.4});
+    });
+  });
+
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
@@ -112,14 +116,12 @@ define([
         console.log(exception);
       }
 
-      if (totalTractIds < 5) {
-        totalTractIds++;
-        results.push(parsed.tractId);
-      }
+      //results.push(parsed.tractId);
       //results.push(totalPop2010);
       var tract = [{
         "type": "Feature",
         "properties": {
+          tractId: parsed.tractId,
           'Population 2010': totalPop2010,
           'pop': totalPop2000,
           'Area'           : area,
@@ -137,7 +139,7 @@ define([
     onError: function(e) { console.log(e); },
     onEnd: function() {
       console.log('all done');
-      var options = {params: {tractIds: results.join(',')}};
+      /*var options = {params: {tractIds: results.join(',')}};
       Streamable.get('/households/search/tracts', options, {
         onData: function(data) {
           console.log(JSON.parse(data));
@@ -145,7 +147,7 @@ define([
         onError: function(err) {
           console.log(err);
         }
-      })
+      });*/
       //console.log(_.max(results));
       //console.log(_.sortBy(results, function(num) { return num; }));
     }
