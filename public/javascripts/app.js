@@ -101,19 +101,6 @@ define([
         }
       }).addTo(map);
 
-  Streamable.get('/tracts',  {
-    onData:  function(data) {
-      parsed = JSON.parse(data);
-      try {
-        var area = parsed.area;
-        var totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
-        var totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
-        var populationDensity2000 = totalPop2000 / area;
-        var populationDensity2010 = totalPop2010 / area * 1000;
-      }
-      catch(exception) {
-        console.log(exception);
-      }
 
 function style(feature) {
     return {
@@ -125,7 +112,39 @@ function style(feature) {
         fillOpacity: 0.7
     };
 }
-      //results.push(totalPop2010);
+
+function calcArea(coordinates){
+  return  _.map(coordinates, function(entry) {
+    return _.reduce(entry, function(list, polygon) {
+        _.each(_.map(polygon, function(point) {
+            return new google.maps.LatLng(point[1], point[0]);
+        }), function(point) {
+            list.push(point);
+    });
+   //console.log(list);
+
+        var area = google.maps.geometry.spherical.computeArea(list);
+        //console.log(area);
+        return area;
+    }, []);
+})
+};
+
+  Streamable.get('/tracts',  {
+    onData:  function(data) {
+      parsed = JSON.parse(data);
+      try {
+        var area = calcArea([parsed.loc.coordinates]);
+        var totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
+        var totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
+        var populationDensity2000 = totalPop2000 / area;
+        var populationDensity2010 = totalPop2010 / area * 1000;
+      }
+      catch(exception) {
+        console.log(exception);
+      }
+
+     // results.push(totalPop2010);
       var tract = [{
         "type": "Feature",
         "properties": {
@@ -141,8 +160,8 @@ function style(feature) {
         }
       }];
 
-      L.geoJson(tract, {style: style}).addTo(map);
-     // myLayer.addData(tract);
+     L.geoJson(tract, {style: style}).addTo(map);
+    // myLayer.addData(tract);
     },
     onError: function(e) { console.log(e); },
     onEnd: function() {
@@ -154,10 +173,10 @@ function style(feature) {
 
 function getColor(d) {
     console.log(d);
-    return d > 10000 ? '#800026' :
-           d > 8000  ? '#BD0026' :
-           d > 6000  ? '#E31A1C' :
-           d > 4000  ? '#FC4E2A' :
+    return d > 7000 ? '#800026' :
+           d > 5000  ? '#BD0026' :
+           d > 4000  ? '#E31A1C' :
+           d > 3000  ? '#FC4E2A' :
            d > 2000   ? '#FD8D3C' :
            d > 1000   ? '#FEB24C' :
            d > 1   ? '#FED976' :
