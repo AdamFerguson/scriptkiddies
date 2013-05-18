@@ -90,33 +90,39 @@ define([
        teeter.on('click', onMarkerClick);
       teeterList.push(teeter);
     });
-    var teeters = L.layerGroup(teeterList);
+
+  });
+
+  var teeters = L.layerGroup(teeterList);
+  var results = [];
+  var tracts;
+  Streamable.get('/tracts',  {
+    onData:  function(data) {
+      parsed = JSON.parse(data);
+      console.log(parsed);
+      var tract = [{
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": parsed.loc.coordinates
+        }
+      }];
+      var tract = L.geoJson(tract);
+      results.push(tract);
+      console.log(results);
+    },
+    onError: function(e) { console.log(e); },
+    onEnd: function() {
+      console.log(results);
+      tracts = L.featureGroup(results).addTo(map);
+      console.log('all done');
+    }
+  });
+
 
     var overlays = {"Harris Teeters": teeters};
     L.control.layers(base,overlays).addTo(map);
-  });
-
-  var results = [];
-  Streamable.get('/tracts',  {
-      onData:  function(data) {
-        parsed = JSON.parse(data);
-        var tract = [{
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": parsed.loc.coordinates
-            }
-        }];
-        var geoj = L.geoJson(tract);
-        results.push(geoj);
-      },
-      onError: function(e) { console.log(e); },
-      onEnd:   function() {
-        console.log('all done');
-        console.log(_.max(results));
-      }
-    });
 
   var markers = new L.MarkerClusterGroup();
   function onMarkerClick(e) {
