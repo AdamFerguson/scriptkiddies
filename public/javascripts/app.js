@@ -73,6 +73,18 @@ define([
   var teeters = L.layerGroup(teeterList);
   var results = [];
   var tracts;
+
+function style(feature) {
+    return {
+        fillColor: getColor(feature.properties.density),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+};
+
   var myLayer = L.geoJson(null,{
         style: function(feature) {
           return {
@@ -148,13 +160,31 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>NC Census Tract Population Density</h4>' +  (props ?
-        '<b>' + '</b>' + props.density + ' people / mi<sup>2</sup>'
+    this._div.innerHTML = '<h4>NC Census Tract Data</h4>' +  (props ?
+        '<b>' +'Population Density 2010' + '</b>' + props.density + ' people / mi<sup>2</sup></br>' +
+        '<b>' +'Population Density 2010' + '</b>' + props.density + ' people / mi<sup>2</sup>'
         : 'Hover over an area');
 };
-
 info.addTo(map);
 
+var legend = L.control({position: 'bottomright'});
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000],
+        labels = [];
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+legend.addTo(map);
+
+
+  var totalTractIds = 0;
   Streamable.get('/tracts',  {
     onData:  function(data) {
       parsed = JSON.parse(data);
@@ -207,21 +237,16 @@ info.addTo(map);
   });
 
 
-function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
-}
-
   function getColor(d) {
       return d > 5000 ? '#800026' :
-             d > 3000  ? '#BD0026' :
-             d > 2000  ? '#E31A1C' :
-             d > 1000  ? '#FC4E2A' :
-             d > 800   ? '#FD8D3C' :
-             d > 600   ? '#FEB24C' :
-             d > 300   ? '#FED976' :
+             d > 4000  ? '#BD0026' :
+             d > 3000  ? '#E31A1C' :
+             d > 2500  ? '#FC4E2A' :
+             d > 1500   ? '#FD8D3C' :
+             d > 1000   ? '#FEB24C' :
+             d > 500   ? '#FED976' :
                         '#FFEDA0';
   }
-
 
   var overlays = {"Harris Teeters": teeters};
   L.control.layers(base,overlays).addTo(map);
