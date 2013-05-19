@@ -16,15 +16,6 @@ function(app) {
     var map = app.map;
 
     app.updateHouseholds = function() {
-      /*var options = {params: {tractIds: results.join(',')}};
-      Streamable.get('/households/search/tracts', options, {
-        onData: function(data) {
-          console.log(JSON.parse(data));
-        },
-        onError: function(err) {
-          console.log(err);
-        }
-      });*/
     }
 
   });

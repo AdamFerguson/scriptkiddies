@@ -23,8 +23,17 @@ function(app) {
       neededTractIds.forEach(function(tractId) {
         Streamable.get('/tracts/' + tractId,  {
           onData:  function(data) {
+            try {
+              var householdData = app.cachedTractData[tractId]['households'];
+            }
+            catch (exception) {
+            }
             app.cachedTractData[tractId] = JSON.parse(data);
-            app.cachedTractData[tractId]['households'] = {};
+            if (householdData) {
+              app.cachedTractData[tractId]['households'] = householdData;
+            } else {
+              app.cachedTractData[tractId]['households'] = {};
+            }
           },
           onError: function(e) { console.log(e); },
           onEnd: function() {}
@@ -43,6 +52,9 @@ function(app) {
               }
             } else {
               app.cachedHouseholdData[householdId] = householdData;
+              if (!app.cachedTractData[tractId]['households']) {
+                app.cachedTractData[tractId]['households'] = {};
+              }
               app.cachedTractData[tractId]['households'][householdId] = householdData;
             }
           },
