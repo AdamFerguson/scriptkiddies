@@ -59,46 +59,46 @@ function(app) {
           },
           onEachFeature: function(feature, layer) {
             var tractId = feature.properties.tractId;
+            var wasPreSelected = false;
 
             layer.on({
                 mouseover: function (e) {
-                              info.update(layer.feature.properties.tractId);
-                              layer.setStyle({
-                                  weight: 2,
-                                  color: '#666',
-                                  dashArray: '',
-                                  fillOpacity: 0.7
-                              });
 
-                              if (!L.Browser.ie && !L.Browser.opera) {
-                                  layer.bringToFront();
+                              if (!_.contains(selectedTractIds, tractId)) {
+
+                                selectedTractIds.push(tractId);
+                                app.updateTracts();
+
+                                info.update(layer.feature.properties.tractId);
+                                layer.setStyle(app.layerSelectedStyle);
+                                if (!L.Browser.ie && !L.Browser.opera) {
+                                    layer.bringToFront();
+                                }
                               }
+
                           },
                 mouseout: function (e) {
-                            if (!(_.contains(selectedTractIds, tractId))) {
+                            if (!wasPreSelected) {
+                              var index = selectedTractIds.indexOf(tractId);
+                              selectedTractIds.splice(index,1);
                               myLayer.resetStyle(e.target);
+                              info.update();
                             }
-                            info.update();
                           },
                 click: function (e) {
   			                  //map.fitBounds(e.target.getBounds());
     				              // e contains properties:
     				              // latlng, corresponds to L.LatLng coordinate clicked on map
-    				              // containerPoint, L.Point
-    				              // layerPoint, L.Point
 
-                          if (_.contains(selectedTractIds, tractId)) {
+                          if (wasPreSelected) {
 
+                            wasPreSelected = false;
                             myLayer.resetStyle(layer);
                             var index = selectedTractIds.indexOf(tractId);
                             selectedTractIds.splice(index,1);
                           } else {
-                            layer.setStyle({
-                                weight: 2,
-                                color: '#666',
-                                dashArray: '',
-                                fillOpacity: 0.7
-                            });
+                            wasPreSelected = true;
+                            layer.setStyle(app.layerSelectedStyle);
                             selectedTractIds.push(tractId);
                           }
                           app.updateTracts();

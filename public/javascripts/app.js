@@ -15,7 +15,7 @@ function() {
   // Poor man's namespacing
   // Judges, please be gentle, I know the front end code is less than great
   // Would have gone for Angular if we had a little more time
-  var app = window.app = {
+  var app =  {
     map: null,
     tractLayerGroup: null,
     householdLayerGroup: null,
@@ -26,6 +26,7 @@ function() {
     selectedTractIds: [],
     cachedTractData: {},
     cachedHouseholdData: {},
+    layerSelectedStyle: {weight: 2, color: '#666', dashArray: '', fillOpacity: 0.7 },
 
     updateTracts:             function() {},
     updateHouseholds:         function() {},
@@ -61,7 +62,13 @@ function() {
             layers: [minimal,googleclone]
       });
 
-    var markers = app.householdLayerGroup = new L.MarkerClusterGroup();
+    var markers = app.householdLayerGroup = new L.MarkerClusterGroup({
+      zoomToBoundsOnClick: false,
+      maxClusterRadius: 50,
+      disableClusteringAtZoom: 15,
+      showCoverageOnHover: false,
+      spiderfyDistanceMultiplier: 2
+    });
     map.addLayer(markers);
 
     var colorTemplate = _.template($('#color-legend-tpl').html());
@@ -80,7 +87,7 @@ function() {
     var handleDataPlots = function() {
       app.plotHouseholds();
       app.updateTractDetails();
-      setTimeout(handleDataPlots, 500);
+      setTimeout(handleDataPlots, 1000);
     };
     handleDataPlots();
 
