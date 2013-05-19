@@ -58,7 +58,7 @@ function(app) {
 
             layer.on({
                 mouseover: function highlightFeature(e) {
-                              info.update(layer.feature.properties);
+                              info.update(layer.feature);
                               layer.setStyle({
                                   weight: 2,
                                   color: '#666',
@@ -145,21 +145,35 @@ function(app) {
       onEnd: function() {console.log('all done'); }
     });
 
-	var info = L.control();
-	info.onAdd = function (map) {
+	var info = {};
+	/*info.onAdd = function (map) {
 	  this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
 	  this.update();
 	  return this._div;
-	};
+	};*/
 
-	// method that we will use to update the control based on feature properties passed
-	info.update = function (props) {
-	  this._div.innerHTML = '<h4>NC Census Tract Data</h4>' +  (props ?
-	      '<b>' +'Population Density 2010' + '</b>' + props.density + ' people / mi<sup>2</sup></br>' +
-	      '<b>' +'Population Density 2010' + '</b>' + props.density + ' people / mi<sup>2</sup>'
-	      : 'Hover over an area');
+  var templateString = '<h4>NC Census Tract Data</h4>' +
+      '<% if (tract) { %>' +
+        '<table>' + 
+        '<tr><th>Population Density 2010</th><td><%= tract.density %> people / mi<sup>2</sup></td></tr>' +
+        '</table>' + 
+      '<% } else { %>' + 
+         '<p>Hover over an area</p>' +
+       '<% } %>';
+  var template = _.template(templateString);
+  console.log(template.source);
+
+  // method that we will use to update the control based on feature properties passed
+	info.update = function (feature) {
+    var data = {};
+    if (feature) {
+      data = {tract: {
+        density: feature.properties.density.toFixed(2)
+      }};
+    }
+    $('#hovered-info').html(template(data));
 	};
-	info.addTo(map);
+	//info.addTo(map);
 
 
 	var calcArea = function(coordinates){
