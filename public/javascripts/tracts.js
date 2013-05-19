@@ -22,9 +22,31 @@ function(app) {
       neededTractIds = _.difference(selectedTractIds, cachedTractIds);
       neededTractIds.forEach(function(tractId) {
         Streamable.get('/tracts/' + tractId,  {
-          onData:  function(data) { app.cachedTractData[tractId] = JSON.parse(data); },
+          onData:  function(data) {
+            app.cachedTractData[tractId] = JSON.parse(data);
+            app.cachedTractData[tractId]['households'] = {};
+          },
           onError: function(e) { console.log(e); },
           onEnd: function() {}
+        });
+        var options = {params: {tractIds: tractId}};
+        Streamable.get('/households/search/tracts', options, {
+          onData: function(data) {
+            var householdData = JSON.parse(data);
+            householdData['tractId'] = tractId;
+            var householdId = householdData.householdId
+
+            var existingHouseholdData = app.cachedHouseholdData[householdId];
+            if (existingHouseholdData) {
+              if (existingHouseholdData.tractId !== tractId) {
+                console.log('Houston, we have a conflict', existingHouseholdData.tractId, tractId);
+              }
+            } else {
+              app.cachedHouseholdData[householdId] = householdData;
+              app.cachedTractData[tractId]['households'][householdId] = householdData;
+            }
+          },
+          onError: function(err) { console.log(err); }
         });
       });
     }
