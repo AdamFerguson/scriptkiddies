@@ -28,7 +28,8 @@ function() {
 
     updateTracts:             function() {},
     updateHouseholds:         function() {},
-    searchHouseholdByTractId: function() {}
+    searchHouseholdByTractId: function() {},
+    plotHouseholds:           function() {}
   };
 
   var getColor = app.getColor = function(d) {
@@ -71,6 +72,12 @@ function() {
     }
     $('#color-legend').html(colorTemplate(colorTemplateData));
 
+
+    var handleDataPlots = function() {
+      app.plotHouseholds();
+      setTimeout(handleDataPlots, 100);
+    };
+    handleDataPlots();
 
     // var locationFilter = new L.LocationFilter().addTo(map);
 

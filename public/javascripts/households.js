@@ -43,8 +43,16 @@ function(app) {
     app.plotHouseholds = function() {
       var markerList = [];
       app.householdLayerGroup.clearLayers();
-      var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
-      markerList.push(marker);
+      app.selectedTractIds.forEach(function(tractId) {
+        if (app.cachedTractData[tractId]) {
+          _.keys(app.cachedTractData[tractId]['households']).forEach(function(householdId) {
+            var household = app.cachedHouseholdData[householdId];
+            var lat = household.loc.coordinates[1], lng = household.loc.coordinates[0];
+            var marker = new L.Marker(new L.LatLng(lat, lng), { title: "asdf" });
+            markerList.push(marker);
+          });
+        }
+      });
       app.householdLayerGroup.addLayers(markerList);
     };
 
