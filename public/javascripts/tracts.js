@@ -108,7 +108,7 @@ function(app) {
         }).addTo(map);
 
     $('#clear-search').on('click', function(e) {
-      selectedTractIds = [];
+      app.selectedTractIds = [];
       myLayer.eachLayer(function(layer) {
         myLayer.resetStyle(layer);
       });

@@ -42,7 +42,10 @@ function(app) {
 
     var oldSelectedTractIds = [];
     app.plotHouseholds = function() {
-      if (_.difference(app.selectedTractIds, oldSelectedTractIds).length === 0) return;
+      if (_.difference(app.selectedTractIds, oldSelectedTractIds).length === 0
+          && _.difference(oldSelectedTractIds, app.selectedTractIds).length === 0) {
+        return;
+      }
 
       oldSelectedTractIds = _.clone(app.selectedTractIds);
       var markerList = [];
