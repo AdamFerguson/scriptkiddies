@@ -36,7 +36,7 @@ namespace :deploy do
 
   desc "START the servers"
   task :start, :roles => :app, :except => { :no_release => true } do
-    run "cd #{current_path} && #{app_environment} node_modules/.bin/forever start #{app_command}"
+    run "cd #{current_path} && #{app_environment} node_modules/.bin/forever start -a -l #{current_path}/log/forever.log -o #{current_path}/log/out.log -e #{current_path}/log/err.log #{app_command}"
   end
 
   desc "STOP the servers"
