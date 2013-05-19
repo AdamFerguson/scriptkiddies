@@ -146,11 +146,6 @@ function(app) {
     });
 
 	var info = {};
-	/*info.onAdd = function (map) {
-	  this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-	  this.update();
-	  return this._div;
-	};*/
 
   var templateString = '<h4>NC Census Tract Data</h4>' +
       '<% if (tract) { %>' +
@@ -161,7 +156,6 @@ function(app) {
          '<p>Hover over an area</p>' +
        '<% } %>';
   var template = _.template(templateString);
-  console.log(template.source);
 
   // method that we will use to update the control based on feature properties passed
 	info.update = function (feature) {
@@ -173,7 +167,6 @@ function(app) {
     }
     $('#hovered-info').html(template(data));
 	};
-	//info.addTo(map);
 
 
 	var calcArea = function(coordinates){

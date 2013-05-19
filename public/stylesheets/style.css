@@ -36,11 +36,34 @@ a {
   width: 350px;
   margin: 0 10px 20px 0;
   padding: 10px;
-  border: 2px solid #333;
+  border: 2px solid #555;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   background-color: #eee;
 }
 #hovered-info table {
   width: 325px;
+}
+#color-legend {
+  height: 165px;
+  width: 150px;
+  margin: 0 10px 20px 0;
+  padding: 10px;
+  border: 2px solid #555;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #eee;
+}
+#color-legend p {
+  margin-bottom: 7px;
+}
+#color-legend ul {
+  list-style-type: none;
+}
+#color-legend ul li {
+  font-size: 9px;
+}
+#color-legend ul li i {
+  height: 5px;
+  width: 5px;
 }

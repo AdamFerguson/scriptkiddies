@@ -7,7 +7,16 @@ block content
   .content-and-controls
     #hovered-info
       p NC Census Tract Data
+    #color-legend
     #search-controls
       button.medium.radius#clear-search Clear Search
       form.custom
   .clearfix
+
+  script(id='color-legend-tpl', type='text/html')
+    | <p>Total Population</p>
+    | <ul>
+    | <% grades.forEach(function(grade) { %>
+    |   <li><i style='background-color: <%= grade.color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> <%= grade.low %> &ndash; <%= grade.high %></li>
+    | <% }); %>
+    | </ul>

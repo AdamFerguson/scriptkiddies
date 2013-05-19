@@ -74,11 +74,22 @@ function() {
     // });
 
 
-    var legend = L.control({position: 'bottomright'});
+    var colorTemplate = _.template($('#color-legend-tpl').html());
+    var colorTemplateData = {grades: []};
+    var grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000];
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+      var data = {color: getColor(grades[i] + 1), low: grades[i] };
+      if (grades[i + 1]) data.high = grades[i + 1];
+      colorTemplateData.grades.push(data);
+    }
+    console.log(colorTemplateData);
+    $('#color-legend').html(colorTemplate(colorTemplateData));
+
+    /*var legend = L.control({position: 'bottomright'});
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
             grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000],
-            labels = [];
         // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {
             div.innerHTML +=
@@ -88,7 +99,7 @@ function() {
 
         return div;
     };
-    legend.addTo(map);
+    legend.addTo(map);*/
 
 
 
