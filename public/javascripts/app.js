@@ -73,9 +73,10 @@ function() {
     $('#color-legend').html(colorTemplate(colorTemplateData));
 
 
+    // Poor man's data bindings
     var handleDataPlots = function() {
       app.plotHouseholds();
-      setTimeout(handleDataPlots, 100);
+      setTimeout(handleDataPlots, 200);
     };
     handleDataPlots();
 

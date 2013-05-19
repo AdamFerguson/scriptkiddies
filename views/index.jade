@@ -20,3 +20,13 @@ block content
     |   <li><i style='background-color: <%= grade.color %>'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> <%= grade.low %> &ndash; <%= grade.high %></li>
     | <% }); %>
     | </ul>
+
+  script(id='hovered-info-tpl', type='text/html')
+    | <h4>NC Census Tract Data</h4>
+    | <% if (tract) { %>
+    |   <table>
+    |   <tr><th>Population Density 2010</th><td><%= tract.populationDensity2010.toFixed(2) %> people / mi<sup>2</sup></td></tr>
+    |   </table>
+    | <% } else { %>
+    |    <p>Hover over an area</p>
+    | <% } %>

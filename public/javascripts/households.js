@@ -40,11 +40,15 @@ function(app) {
       });
     };
 
+    var oldSelectedTractIds = [];
     app.plotHouseholds = function() {
+      if (_.difference(app.selectedTractIds, oldSelectedTractIds).length === 0) return;
+
+      oldSelectedTractIds = _.clone(app.selectedTractIds);
       var markerList = [];
       app.householdLayerGroup.clearLayers();
       app.selectedTractIds.forEach(function(tractId) {
-        if (app.cachedTractData[tractId]) {
+        if (app.cachedTractData[tractId] && app.cachedTractData[tractId]['households']) {
           _.keys(app.cachedTractData[tractId]['households']).forEach(function(householdId) {
             var household = app.cachedHouseholdData[householdId];
             var lat = household.loc.coordinates[1], lng = household.loc.coordinates[0];

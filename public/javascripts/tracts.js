@@ -18,7 +18,11 @@ function(app) {
     var selectedTractIds = app.selectedTractIds;
 
     app.updateTracts = function() {
-      cachedTractIds = _.keys(app.cachedTractData).map(function(tractId) { return parseInt(tractId)});
+      // interested in the tractId's that don't have any household data
+      cachedTractIds = _.filter(_.keys(app.cachedTractData), function(tractId){
+        return app.cachedTractData[tractId]['households'];
+      }).map(function(tractId) { return parseInt(tractId)});
+
       neededTractIds = _.difference(selectedTractIds, cachedTractIds);
       neededTractIds.forEach(function(tractId) {
         Streamable.get('/tracts/' + tractId,  {
@@ -58,7 +62,7 @@ function(app) {
 
             layer.on({
                 mouseover: function highlightFeature(e) {
-                              info.update(layer.feature);
+                              info.update(layer.feature.properties.tractId);
                               layer.setStyle({
                                   weight: 2,
                                   color: '#666',
@@ -114,15 +118,17 @@ function(app) {
       onData:  function(data) {
         parsed = JSON.parse(data);
         try {
-          var area = calcArea([parsed.loc.coordinates]);
-          var totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
-          var totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
-          var populationDensity2000 = totalPop2000 / area;
-          var populationDensity2010 = totalPop2010 / area;
+          var area = parsed.area = calcArea([parsed.loc.coordinates]);
+          var totalPop2000 = parsed.totalPop2000 = _.where(parsed.totalPopulations, {year: 2000})[0].count;
+          var totalPop2010 = parsed.totalPop2010 = _.where(parsed.totalPopulations, {year: 2010})[0].count;
+          var populationDensity2000 = parsed.populationDensity2000 = totalPop2000 / area;
+          var populationDensity2010 = parsed.populationDensity2010 = totalPop2010 / area;
         }
         catch(exception) {
           console.log(exception);
         }
+
+        app.cachedTractData[parsed.tractId] = parsed;
 
         var tract = [{
           "type": "Feature",
@@ -147,23 +153,14 @@ function(app) {
 
 	var info = {};
 
-  var templateString = '<h4>NC Census Tract Data</h4>' +
-      '<% if (tract) { %>' +
-        '<table>' + 
-        '<tr><th>Population Density 2010</th><td><%= tract.density %> people / mi<sup>2</sup></td></tr>' +
-        '</table>' + 
-      '<% } else { %>' + 
-         '<p>Hover over an area</p>' +
-       '<% } %>';
-  var template = _.template(templateString);
+  var template = _.template($('#hovered-info-tpl').html());
 
   // method that we will use to update the control based on feature properties passed
-	info.update = function (feature) {
-    var data = {};
-    if (feature) {
-      data = {tract: {
-        density: feature.properties.density.toFixed(2)
-      }};
+	info.update = function (tractId) {
+    var data = {tract: false};
+    if (tractId) {
+      var tract = app.cachedTractData[tractId];
+      data = {tract: tract};
     }
     $('#hovered-info').html(template(data));
 	};
