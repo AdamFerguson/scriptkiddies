@@ -13,6 +13,7 @@ define([
 function() {
 
   // Poor man's namespacing
+  // Would have gone for Angular if we had a little more time
   var app = window.app = {
     map: null,
     tractLayerGroup: null,
@@ -55,6 +56,9 @@ function() {
             zoom: 10,
             layers: [minimal,googleclone]
       });
+
+    var markers = app.householdLayerGroup = new L.MarkerClusterGroup();
+    map.addLayer(markers);
 
     // var locationFilter = new L.LocationFilter().addTo(map);
 

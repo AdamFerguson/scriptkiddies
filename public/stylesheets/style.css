@@ -1,5 +1,6 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("../images/mooning_@2x.png");
 }
 a {
   color: #00b7ff;
@@ -7,14 +8,16 @@ a {
 #map {
   width: 500px;
   height: 500px;
-  margin-left: 75px;
+  margin-left: 50px;
   margin-bottom: 100px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
   float: left;
+  -webkit-box-shadow: 10px 10px 5px #666;
+  box-shadow: 10px 10px 5px #666;
 }
-#search-controls {
-  margin-left: 25px;
+.content-and-controls {
+  margin-left: 50px;
   float: left;
 }
 .clearfix {
@@ -27,4 +30,14 @@ a {
 }
 .clearfix:after {
   clear: both;
+}
+#hovered-info {
+  height: 300px;
+  width: 300px;
+  margin: 0 10px 20px 0;
+  padding: 10px;
+  border: 2px solid #333;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #eee;
 }

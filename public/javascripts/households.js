@@ -38,7 +38,15 @@ function(app) {
         },
         onError: function(err) { console.log(err); }
       });
-    }
+    };
+
+    app.plotHouseholds = function() {
+      var markerList = [];
+      //app.householdLayerGroup.clearLayers();
+      var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
+      markerList.push(marker);
+      app.householdLayerGroup.addLayers(markerList);
+    };
 
   });
 });

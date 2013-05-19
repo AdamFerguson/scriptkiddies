@@ -2,6 +2,7 @@
 
 body
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  background-image: url('../images/mooning_@2x.png')
 
 a
   color: #00B7FF
@@ -9,14 +10,24 @@ a
 #map
   width: 500px
   height: 500px
-  margin-left: 75px
+  margin-left: 50px
   margin-bottom: 100px
   border-radius: 10px
   float: left
+  box-shadow: 10px 10px 5px #666
 
-#search-controls
-  margin-left: 25px
+.content-and-controls
+  margin-left: 50px
   float: left
 
 .clearfix
   clearfix()
+
+#hovered-info
+  height: 300px
+  width: 300px
+  margin: 0 10px 20px 0
+  padding: 10px
+  border: 2px solid #333
+  border-radius: 5px
+  background-color: #EEE

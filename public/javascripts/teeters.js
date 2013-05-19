@@ -37,7 +37,7 @@ function(app) {
       $.each(data, function(key, val) {
         var desc = "Harris Teeter #" + val.storeId;
         var teeter = L.marker([val.loc[1],val.loc[0]],{icon: teetercon},{title: val.storeId}).bindLabel(desc);
-         teeter.on('click', onMarkerClick);
+         //teeter.on('click', onMarkerClick);
         teeterList.push(teeter);
       });
 
@@ -47,7 +47,7 @@ function(app) {
 	  L.control.layers(base,overlays).addTo(map);
     });
 
-    var markers = new L.MarkerClusterGroup();
+    /*var markers = new L.MarkerClusterGroup();
     function onMarkerClick(e) {
        $.each(stores, function(key, val) {
           console.log(e);
@@ -65,7 +65,7 @@ function(app) {
            });
         }
       });
-    }
+    }*/
 
   });
 });
