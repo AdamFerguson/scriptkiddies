@@ -107,6 +107,14 @@ function(app) {
             if (total[desc]) total[desc] = '$' + total[desc].round(2);
           });
           return total;
+        },
+        totalOverallSales: function(tract) {
+          var total = this.totalSales(tract);
+          var number = 0;
+          _.keys(total).forEach(function(desc) {
+            if (total[desc]) number = number + parseFloat(total[desc].substring(1));
+          });
+          return '$' + number.round(2);
         }
       };
       $('#tract-details').html(tractDetailsTmpl(data));
