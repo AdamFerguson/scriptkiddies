@@ -15,6 +15,19 @@ function(app) {
   $(function() {
   	var map = app.map;
   	var getColor = app.getColor;
+    var selectedTractIds = app.selectedTractIds;
+
+    app.updateTracts = function() {
+      cachedTractIds = _.keys(app.cachedTractData).map(function(tractId) { return parseInt(tractId)});
+      neededTractIds = _.difference(selectedTractIds, cachedTractIds);
+      neededTractIds.forEach(function(tractId) {
+        Streamable.get('/tracts/' + tractId,  {
+          onData:  function(data) { app.cachedTractData[tractId] = JSON.parse(data); },
+          onError: function(e) { console.log(e); },
+          onEnd: function() {}
+        });
+      });
+    }
 
     var myLayer = app.tractLayerGroup  = L.geoJson(null,{
           style: function(feature) {
@@ -28,6 +41,8 @@ function(app) {
             };
           },
           onEachFeature: function(feature, layer) {
+            var tractId = feature.properties.tractId;
+
             layer.on({
                 mouseover: function highlightFeature(e) {
                               info.update(layer.feature.properties);
@@ -43,20 +58,30 @@ function(app) {
                               }
                           },
                 mouseout: function resetHighlight(e) {
-                            myLayer.resetStyle(e.target);
+                            if (!(_.contains(selectedTractIds, tractId))) {
+                              myLayer.resetStyle(e.target);
+                            }
                             info.update();
                           },
                 click: function zoomToFeature(e) {
-                    map.fitBounds(e.target.getBounds());
-                }
+  			                  //map.fitBounds(e.target.getBounds());
+    				              // e contains properties:
+    				              // latlng, corresponds to L.LatLng coordinate clicked on map
+    				              // containerPoint, L.Point
+    				              // layerPoint, L.Point
+
+                          if (_.contains(selectedTractIds, tractId)) {
+
+                            myLayer.resetStyle(layer);
+                            var index = selectedTractIds.indexOf(tractId);
+                            selectedTractIds.splice(index,1);
+                          } else {
+                            layer.setStyle({fillOpacity: 0.8});
+                            selectedTractIds.push(tractId);
+                          }
+                          app.updateTracts();
+	  	                  }
             });
-            /*layer.on('click', function(e) {
-              // e contains properties:
-              // latlng, corresponds to L.LatLng coordinate clicked on map
-              // containerPoint, L.Point
-              // layerPoint, L.Point
-              layer.setStyle({fillOpacity: 0.8});
-            });*/
           }
         }).addTo(map);
 
@@ -80,8 +105,6 @@ function(app) {
           console.log(exception);
         }
 
-        //results.push(parsed.tractId);
-        //results.push(totalPop2010);
         var tract = [{
           "type": "Feature",
           "properties": {
@@ -100,20 +123,7 @@ function(app) {
         myLayer.addData(tract);
       },
       onError: function(e) { console.log(e); },
-      onEnd: function() {
-        console.log('all done');
-        /*var options = {params: {tractIds: results.join(',')}};
-        Streamable.get('/households/search/tracts', options, {
-          onData: function(data) {
-            console.log(JSON.parse(data));
-          },
-          onError: function(err) {
-            console.log(err);
-          }
-        });*/
-        //console.log(_.max(results));
-        //console.log(_.sortBy(results, function(num) { return num; }));
-      }
+      onEnd: function() {console.log('all done'); }
     });
 
 	var info = L.control();

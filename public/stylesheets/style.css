@@ -5,8 +5,8 @@ a {
   color: #00b7ff;
 }
 #map {
-  width: 800px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
   margin-left: 75px;
   margin-bottom: 100px;
   -webkit-border-radius: 10px;

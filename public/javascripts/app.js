@@ -19,7 +19,13 @@ function() {
     teeterLayerGroup: null,
     getColor: null,
     minimalTheme: null,
-    googlecloneTheme: null
+    googlecloneTheme: null,
+    selectedTractIds: [],
+    cachedTractData: {},
+    cachedHouseholdData: {},
+
+    updateTracts: function() {},
+    updateHouseholds: function() {}
   };
 
   var getColor = app.getColor = function(d) {
@@ -62,7 +68,6 @@ function() {
     // });
 
 
-
     var legend = L.control({position: 'bottomright'});
     legend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'info legend'),
@@ -80,26 +85,6 @@ function() {
     legend.addTo(map);
 
 
-
-    var markers = new L.MarkerClusterGroup();
-    function onMarkerClick(e) {
-       $.each(stores, function(key, val) {
-          console.log(e);
-          if( val.loc[1] == e.target._latlng.lat && val.loc[0] == e.target._latlng.lng){
-          var markerList = [];
-          var storeurl = '/stores/' + val.storeId + '/households';
-          $.getJSON(storeurl, function(data) {
-             $.each(data, function(key, val) {
-               var marker = new L.Marker(new L.LatLng(val.loc[1], val.loc[0]), { title: "asdf" });
-               markerList.push(marker);
-             });
-              markers.clearLayers();
-              markers.addLayers(markerList);
-              map.addLayer(markers);
-           });
-        }
-      });
-    }
 
   });
 

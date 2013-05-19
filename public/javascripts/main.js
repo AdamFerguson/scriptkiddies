@@ -35,4 +35,4 @@ require.config({
   }
 });
 
-require(['app','tracts','teeters'], function(app) {  });
+require(['app','tracts','teeters','households'], function(app) {  });

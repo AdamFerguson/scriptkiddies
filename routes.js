@@ -13,5 +13,6 @@ module.exports = function(app) {
   app.get('/households/search/bounds', household.searchByBounds);
   app.get('/households/search/tracts', household.searchByTracts);
   app.get('/households', household.list);
+  app.get('/tracts/:tractId', tract.show);
   app.get('/tracts', tract.list);
 };
