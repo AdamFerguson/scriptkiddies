@@ -7,7 +7,8 @@ define([
        'leaflet-label',
        'locationfilter',
        'socketio',
-       'streamable'
+       'streamable',
+       'sugar'
       ], 
 
 function(app) {
@@ -35,6 +36,35 @@ function(app) {
       });
     });
 
+    var tractMouseHoverHandler = function(tractId) {
+      var oldBackgroundColor, myTractLayer;
+      var isWhite = false;
+
+      $('#tract-details').delegate('#tract-' + tractId, 'mouseover', function(e) {
+        oldBackgroundColor = $(this).css('background-color');
+        if (oldBackgroundColor === "rgba(0, 0, 0, 0)") {
+          isWhite = true;
+        }
+
+        $(this).css('background-color', '#CCC');
+        app.tractLayerGroup.eachLayer(function(layer) {
+          if (tractId === layer.feature.properties.tractId) {
+            myTractLayer = layer;
+            layer.setStyle({fillOpacity: 1});
+          }
+        })
+      });
+
+      $('#tract-details').delegate('#tract-' + tractId, 'mouseout', function(e) {
+        if (isWhite) $(this).css('background-color', '#FFF');
+        else {
+          $(this).css('background-color', '#F9F9F9');
+        }
+        myTractLayer.setStyle({fillOpacity: 0.7});
+      });
+
+    };
+
 
     var tractDetailsTmpl = _.template($('#tract-details-tmpl').html());
     var oldSelectedTractIds = [];
@@ -47,7 +77,11 @@ function(app) {
       oldSelectedTractIds = _.clone(app.selectedTractIds);
       firstRender = false;
 
-      var tracts = app.selectedTractIds.map(function(tractId) { return app.cachedTractData[tractId]; });
+      var tracts = app.selectedTractIds.map(function(tractId) { 
+        tractMouseHoverHandler(tractId);
+        return app.cachedTractData[tractId]; 
+      });
+
       var data = {
         tracts: tracts,
         averageHouseholdSize: function(tract, year) {
@@ -64,10 +98,13 @@ function(app) {
               var household = tract.households[householdId];
               household.transactions.forEach(function(trans) {
                 var description = trans.description;
-                total[description] = total[description] ? (total[description] + total.netSales) : trans.netSales;
+                total[description] = total[description] ? (total[description] + trans.netSales) : trans.netSales;
               });
             });
           }
+          _.keys(total).forEach(function(desc) {
+            if (total[desc]) total[desc] = '$' + total[desc].round(2);
+          });
           return total;
         }
       };

@@ -16,6 +16,7 @@ require.config({
       deps: ['jquery', 'socketio'],
       exports: 'Streamable'
     },
+    'sugar': {},
     'underscore': { exports: '_' }
   },
 
@@ -31,6 +32,7 @@ require.config({
     locationfilter:              'vendor/locationfilter',
     socketio:                    'vendor/socket.io',
     streamable:                  'vendor/streamable',
+    sugar:                       'vendor/sugar-1.3.9.min',
     underscore:                  'vendor/underscore-min'
   }
 });
