@@ -6,7 +6,7 @@ a {
   color: #00b7ff;
 }
 #map {
-  width: 500px;
+  width: 400px;
   height: 500px;
   margin-left: 50px;
   margin-bottom: 100px;
@@ -93,11 +93,17 @@ a {
 }
 #tract-details #detail-box {
   min-height: 165px;
-  width: 350px;
+  width: 500px;
   margin: 0 10px 20px 0;
   padding: 10px;
   border: 2px solid #555;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   background-color: #eee;
+}
+#tract-details #detail-box .sales-table {
+  width: 100px;
+}
+#tract-details #detail-box .sales-table th {
+  text-align: left;
 }

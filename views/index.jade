@@ -6,7 +6,8 @@ block content
       leaflet(markers='markers', center='center')
   #content-and-controls
     #hovered-info
-      p NC Census Tract Data
+      h3 NC Census Tract Data
+      p Please hover over an area
     #color-legend
     #streaming-household-count
     .clearfix
@@ -54,7 +55,27 @@ block content
     | <h3><%= totalHouseholds %></h3>
 
   script(id='tract-details-tmpl', type='text/html')
-    | <div id='detail-box'
-    |   <h4>Tract Details</h4>
+    | <div id='detail-box'>
+    |   <h3>Tract Details (2010)</h3>
+    |   <table class='tracts-list'>
+    |   <thead><tr>
+    |     <th>Population</th>
+    |     <th width='75'>Avg Household Size</th>
+    |     <th>Total Sales</th>
+    |   </tr></thead>
+    |   <% tracts.forEach(function(tract) { %>
+    |     <tr id='tract-<%= tract.tractId %>'>
+    |       <td><%= tract.totalPop2010 %></td> 
+    |       <td><%= averageHouseholdSize(tract, 2010) %></td> 
+    |       <!--  naughty, naughty -->
+    |       <% var total = totalSales(tract) %>
+    |       <td><table class='sales-table'><% _.keys(total).forEach(function(saleType) {  %>
+    |         <% if (total[saleType]) { %>
+    |           <tr><th><%= saleType %></th><td><%= total[saleType] %></td></tr>
+    |         <% } %>
+    |       <% }); %></table></td> 
+    |     </tr>
+    |   <% }); %>
+    |   </table>
     | </div>
     | <button id='view-summary' class='medium radius'>View Tract Summary</button>
