@@ -60,6 +60,18 @@ function() {
     var markers = app.householdLayerGroup = new L.MarkerClusterGroup();
     map.addLayer(markers);
 
+    var colorTemplate = _.template($('#color-legend-tpl').html());
+    var colorTemplateData = {grades: []};
+    var grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000];
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+      var data = {color: getColor(grades[i] + 1), low: grades[i] };
+      if (grades[i + 1]) data.high = grades[i + 1];
+      colorTemplateData.grades.push(data);
+    }
+    $('#color-legend').html(colorTemplate(colorTemplateData));
+
+
     // var locationFilter = new L.LocationFilter().addTo(map);
 
     // locationFilter.on('change', function(e) {
@@ -72,36 +84,6 @@ function() {
     //     onEnd:   function() { console.log('all done'); }
     //   });
     // });
-
-
-    var colorTemplate = _.template($('#color-legend-tpl').html());
-    var colorTemplateData = {grades: []};
-    var grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000];
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-      var data = {color: getColor(grades[i] + 1), low: grades[i] };
-      if (grades[i + 1]) data.high = grades[i + 1];
-      colorTemplateData.grades.push(data);
-    }
-    console.log(colorTemplateData);
-    $('#color-legend').html(colorTemplate(colorTemplateData));
-
-    /*var legend = L.control({position: 'bottomright'});
-    legend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 500, 1000, 1500,2500, 3000, 4000, 5000],
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-        }
-
-        return div;
-    };
-    legend.addTo(map);*/
-
-
 
   });
 

@@ -44,6 +44,10 @@ a {
 #hovered-info table {
   width: 325px;
 }
+#hovered-info table th {
+  width: 175px;
+  padding: 6.9px;
+}
 #color-legend {
   height: 165px;
   width: 150px;
