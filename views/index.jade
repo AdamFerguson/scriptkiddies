@@ -8,6 +8,8 @@ block content
     #hovered-info
       p NC Census Tract Data
     #color-legend
+    #streaming-household-count
+    .clearfix
     #search-controls
       button.medium.radius#clear-search Clear Search
       form.custom
@@ -44,3 +46,7 @@ block content
     | <% } else { %>
     |    <p>Hover over an area</p>
     | <% } %>
+
+  script(id='streaming-household-count-tpl', type='text/html')
+    | <h4>Total Households Streamed</h4>
+    | <h3><%= totalHouseholds %></h3>

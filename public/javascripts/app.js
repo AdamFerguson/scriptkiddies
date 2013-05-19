@@ -29,7 +29,8 @@ function() {
     updateTracts:             function() {},
     updateHouseholds:         function() {},
     searchHouseholdByTractId: function() {},
-    plotHouseholds:           function() {}
+    plotHouseholds:           function() {},
+    updateHouseholdCount:     function() {}
   };
 
   var getColor = app.getColor = function(d) {
@@ -79,6 +80,12 @@ function() {
       setTimeout(handleDataPlots, 500);
     };
     handleDataPlots();
+
+    var handleHouseholdCount = function() {
+      app.updateHouseholdCount();
+      setTimeout(handleHouseholdCount, 50);
+    };
+    handleHouseholdCount();
 
     // var locationFilter = new L.LocationFilter().addTo(map);
 

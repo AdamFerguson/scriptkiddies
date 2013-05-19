@@ -63,5 +63,18 @@ function(app) {
       app.householdLayerGroup.addLayers(markerList);
     };
 
+    var householdCountTmpl = _.template($('#streaming-household-count-tpl').html());
+    var oldCount;
+    app.updateHouseholdCount = function() {
+      var totalHouseholds = _.keys(app.cachedHouseholdData).length;
+      console.log('yo');
+      if (oldCount !== totalHouseholds) {
+
+        oldCount = totalHouseholds;
+        var data = {totalHouseholds: totalHouseholds};
+        $('#streaming-household-count').html(householdCountTmpl(data));
+      }
+    };
+
   });
 });
