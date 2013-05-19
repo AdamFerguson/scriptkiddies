@@ -47,6 +47,7 @@ a {
 #hovered-info table th {
   width: 175px;
   padding: 6.9px;
+  text-align: left;
 }
 #color-legend {
   height: 165px;
