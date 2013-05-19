@@ -61,7 +61,7 @@ function(app) {
             var tractId = feature.properties.tractId;
 
             layer.on({
-                mouseover: function highlightFeature(e) {
+                mouseover: function (e) {
                               info.update(layer.feature.properties.tractId);
                               layer.setStyle({
                                   weight: 2,
@@ -74,13 +74,13 @@ function(app) {
                                   layer.bringToFront();
                               }
                           },
-                mouseout: function resetHighlight(e) {
+                mouseout: function (e) {
                             if (!(_.contains(selectedTractIds, tractId))) {
                               myLayer.resetStyle(e.target);
                             }
                             info.update();
                           },
-                click: function zoomToFeature(e) {
+                click: function (e) {
   			                  //map.fitBounds(e.target.getBounds());
     				              // e contains properties:
     				              // latlng, corresponds to L.LatLng coordinate clicked on map

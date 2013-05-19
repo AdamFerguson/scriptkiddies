@@ -11,8 +11,10 @@ block content
     #streaming-household-count
     .clearfix
     #search-controls
-      button.medium.radius#clear-search Clear Search
+      button.medium.radius#view-details View Tract Details
+      button.medium.radius#clear-search Clear Selections
       form.custom
+  #tract-details(style='display:hidden')
   .clearfix
 
   script(id='color-legend-tpl', type='text/html')
@@ -50,3 +52,7 @@ block content
   script(id='streaming-household-count-tpl', type='text/html')
     | <h4>Total Households Streamed</h4>
     | <h3><%= totalHouseholds %></h3>
+
+  script(id='tract-details-tmpl', type='text/html')
+    | <h4>Tract Details</h4>
+    | <button id='view-summary' class='medium radius'>View Tract Summary</button>

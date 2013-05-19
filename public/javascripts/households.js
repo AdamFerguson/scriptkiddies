@@ -67,7 +67,6 @@ function(app) {
     var oldCount;
     app.updateHouseholdCount = function() {
       var totalHouseholds = _.keys(app.cachedHouseholdData).length;
-      console.log('yo');
       if (oldCount !== totalHouseholds) {
 
         oldCount = totalHouseholds;
