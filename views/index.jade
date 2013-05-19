@@ -4,7 +4,7 @@ block content
   .map-content
     #map
       leaflet(markers='markers', center='center')
-  .content-and-controls
+  #content-and-controls
     #hovered-info
       p NC Census Tract Data
     #color-legend
@@ -14,7 +14,7 @@ block content
       button.medium.radius#view-details View Tract Details
       button.medium.radius#clear-search Clear Selections
       form.custom
-  #tract-details(style='display:hidden')
+  #tract-details(style='display: none;')
   .clearfix
 
   script(id='color-legend-tpl', type='text/html')
@@ -54,5 +54,7 @@ block content
     | <h3><%= totalHouseholds %></h3>
 
   script(id='tract-details-tmpl', type='text/html')
-    | <h4>Tract Details</h4>
+    | <div id='detail-box'
+    |   <h4>Tract Details</h4>
+    | </div>
     | <button id='view-summary' class='medium radius'>View Tract Summary</button>

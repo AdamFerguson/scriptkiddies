@@ -16,9 +16,12 @@ a {
   -webkit-box-shadow: 10px 10px 5px #666;
   box-shadow: 10px 10px 5px #666;
 }
-.content-and-controls {
+#content-and-controls {
   margin-left: 50px;
   float: left;
+}
+#content-and-controls button {
+  margin-right: 10px;
 }
 .clearfix {
   zoom: 1;
@@ -85,6 +88,10 @@ a {
   float: left;
 }
 #tract-details {
+  float: left;
+  margin-left: 50px;
+}
+#tract-details #detail-box {
   min-height: 165px;
   width: 350px;
   margin: 0 10px 20px 0;
@@ -93,5 +100,4 @@ a {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   background-color: #eee;
-  float: left;
 }

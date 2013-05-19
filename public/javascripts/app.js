@@ -13,6 +13,7 @@ define([
 function() {
 
   // Poor man's namespacing
+  // Judges, please be gentle, I know the front end code is less than great
   // Would have gone for Angular if we had a little more time
   var app = window.app = {
     map: null,
@@ -30,7 +31,8 @@ function() {
     updateHouseholds:         function() {},
     searchHouseholdByTractId: function() {},
     plotHouseholds:           function() {},
-    updateHouseholdCount:     function() {}
+    updateHouseholdCount:     function() {},
+    updateTractDetails:       function() {}
   };
 
   var getColor = app.getColor = function(d) {
@@ -77,6 +79,7 @@ function() {
     // Poor man's data bindings
     var handleDataPlots = function() {
       app.plotHouseholds();
+      app.updateTractDetails();
       setTimeout(handleDataPlots, 500);
     };
     handleDataPlots();
