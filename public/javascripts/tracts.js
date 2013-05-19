@@ -110,7 +110,12 @@ function(app) {
                             var index = selectedTractIds.indexOf(tractId);
                             selectedTractIds.splice(index,1);
                           } else {
-                            layer.setStyle({fillOpacity: 0.8});
+                            layer.setStyle({
+                                weight: 2,
+                                color: '#666',
+                                dashArray: '',
+                                fillOpacity: 0.7
+                            });
                             selectedTractIds.push(tractId);
                           }
                           app.updateTracts();
@@ -120,8 +125,9 @@ function(app) {
         }).addTo(map);
 
     $('#clear-search').on('click', function(e) {
+      selectedTractIds = [];
       myLayer.eachLayer(function(layer) {
-        layer.setStyle({fillOpacity: 0.4});
+        myLayer.resetStyle(layer);
       });
     });
 
