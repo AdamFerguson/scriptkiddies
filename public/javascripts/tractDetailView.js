@@ -8,7 +8,8 @@ define([
        'locationfilter',
        'socketio',
        'streamable',
-       'sugar'
+       'sugar',
+       'jquery.dataTables'
       ], 
 
 function(app) {
@@ -109,6 +110,7 @@ function(app) {
         }
       };
       $('#tract-details').html(tractDetailsTmpl(data));
+      $('#tracts-details-table').dataTable();
     };
      
   });
