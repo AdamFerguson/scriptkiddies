@@ -74,7 +74,7 @@ block content
     |       <% var total = totalSales(tract) %>
     |       <td><table class='sales-table'><% _.keys(total).forEach(function(saleType) {  %>
     |         <% if (total[saleType]) { %>
-    |           <tr><th><%= saleType %></th><td><%= total[saleType] %></td></tr>
+    |           <tr><th><%= saleType %></th><td><%= total[saleType] %></td><td><%= typePercentageSales(tract,total,saleType) %></td></tr>
     |         <% } %>
     |       <% }); %></table></td> 
     |     </tr>

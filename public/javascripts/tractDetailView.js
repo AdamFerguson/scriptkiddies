@@ -115,6 +115,14 @@ function(app) {
             if (total[desc]) number = number + parseFloat(total[desc].substring(1));
           });
           return '$' + number.round(2);
+        },
+        typePercentageSales: function(tract,total,saleType) {
+          if (total[saleType]) {
+            var totalOverall = parseFloat(this.totalOverallSales(tract).substring(1));
+            var totalSaleType = parseFloat(total[saleType].substring(1));
+            return ((totalSaleType/totalOverall) * 100).round(1) + '%';
+          }
+          return 'N/A';
         }
       };
       $('#tract-details').html(tractDetailsTmpl(data));
