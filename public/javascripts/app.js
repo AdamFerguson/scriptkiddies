@@ -12,6 +12,7 @@ define([
 
 function() {
 
+  // Poor man's namespacing
   var app = window.app = {
     map: null,
     tractLayerGroup: null,
@@ -24,8 +25,9 @@ function() {
     cachedTractData: {},
     cachedHouseholdData: {},
 
-    updateTracts: function() {},
-    updateHouseholds: function() {}
+    updateTracts:             function() {},
+    updateHouseholds:         function() {},
+    searchHouseholdByTractId: function() {}
   };
 
   var getColor = app.getColor = function(d) {

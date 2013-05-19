@@ -15,7 +15,29 @@ function(app) {
   $(function() {
     var map = app.map;
 
-    app.updateHouseholds = function() {
+    app.searchHouseholdByTractId = function(tractId) {
+      var options = {params: {tractIds: tractId}};
+      Streamable.get('/households/search/tracts', options, {
+        onData: function(data) {
+          var householdData = JSON.parse(data);
+          householdData['tractId'] = tractId;
+          var householdId = householdData.householdId
+
+          var existingHouseholdData = app.cachedHouseholdData[householdId];
+          if (existingHouseholdData) {
+            if (existingHouseholdData.tractId !== tractId) {
+              console.log('Houston, we have a conflict', existingHouseholdData.tractId, tractId);
+            }
+          } else {
+            app.cachedHouseholdData[householdId] = householdData;
+            if (!app.cachedTractData[tractId]['households']) {
+              app.cachedTractData[tractId]['households'] = {};
+            }
+            app.cachedTractData[tractId]['households'][householdId] = householdData;
+          }
+        },
+        onError: function(err) { console.log(err); }
+      });
     }
 
   });
