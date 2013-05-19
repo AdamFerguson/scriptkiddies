@@ -32,7 +32,7 @@ function(app) {
             }
             catch (exception) {
             }
-            app.cachedTractData[tractId] = JSON.parse(data);
+            $.extend(app.cachedTractData[tractId], JSON.parse(data));
             if (householdData) {
               app.cachedTractData[tractId]['households'] = householdData;
             } else {
@@ -159,7 +159,7 @@ function(app) {
 	info.update = function (tractId) {
     var data = {tract: false};
     if (tractId) {
-      var tract = app.cachedTractData[tractId];
+      var tract = window.tract = app.cachedTractData[tractId];
       data = {tract: tract};
     }
     $('#hovered-info').html(template(data));

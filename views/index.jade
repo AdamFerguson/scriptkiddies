@@ -22,11 +22,25 @@ block content
     | </ul>
 
   script(id='hovered-info-tpl', type='text/html')
-    | <h4>NC Census Tract Data</h4>
+    | <h3>NC Census Tract Data</h3>
     | <% if (tract) { %>
-    |   <table>
-    |   <tr><th>Population Density 2010</th><td><%= tract.populationDensity2010.toFixed(2) %> people / mi<sup>2</sup></td></tr>
-    |   </table>
+    |   <% [2010, 2000].forEach(function(year) { %>
+    |     <h4>Year <%= year %></h4>
+    |     <table>
+    |       <tr>
+    |         <th>Population</th>
+    |         <td><% if (tract['totalPop' + year]) { %>
+    |           <%= tract['totalPop' + year].toFixed(2) %> people
+    |         <% } %></td>
+    |       </tr>
+    |       <tr>
+    |         <th>Population Density</th>
+    |         <td><% if (tract['populationDensity' + year]) { %>
+    |           <%= tract['populationDensity' + year].toFixed(2) %> people / mi<sup>2</sup>
+    |         <% } %></td>
+    |       </tr>
+    |     </table>
+    |   <% }); %>
     | <% } else { %>
     |    <p>Hover over an area</p>
     | <% } %>

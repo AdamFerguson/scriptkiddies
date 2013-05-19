@@ -76,7 +76,7 @@ function() {
     // Poor man's data bindings
     var handleDataPlots = function() {
       app.plotHouseholds();
-      setTimeout(handleDataPlots, 200);
+      setTimeout(handleDataPlots, 500);
     };
     handleDataPlots();
 
