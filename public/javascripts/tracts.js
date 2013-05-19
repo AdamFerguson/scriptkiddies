@@ -66,7 +66,7 @@ function(app) {
 
                               if (!_.contains(selectedTractIds, tractId)) {
 
-                                selectedTractIds.push(tractId);
+                                app.addSelectedTractId(tractId);
                                 app.updateTracts();
 
                                 info.update(layer.feature.properties.tractId);
@@ -79,8 +79,7 @@ function(app) {
                           },
                 mouseout: function (e) {
                             if (!wasPreSelected) {
-                              var index = selectedTractIds.indexOf(tractId);
-                              selectedTractIds.splice(index,1);
+                              app.removeSelectedTractId(tractId);
                               myLayer.resetStyle(e.target);
                               info.update();
                             }
@@ -94,12 +93,11 @@ function(app) {
 
                             wasPreSelected = false;
                             myLayer.resetStyle(layer);
-                            var index = selectedTractIds.indexOf(tractId);
-                            selectedTractIds.splice(index,1);
+                            app.removeSelectedTractId(tractId);
                           } else {
                             wasPreSelected = true;
                             layer.setStyle(app.layerSelectedStyle);
-                            selectedTractIds.push(tractId);
+                            app.addSelectedTractId(tractId);
                           }
                           app.updateTracts();
 	  	                  }
@@ -179,5 +177,22 @@ function(app) {
 	      }, []);
 		  })
 	  };
+
+    app.addSelectedTractId = function(tractId) {
+      if (!_.contains(app.selectedTractIds, tractId)) {
+        app.selectedTractIds.push(tractId);
+        return true;
+      }
+      return false;
+    };
+
+    app.removeSelectedTractId = function(tractId) {
+      if (_.contains(app.selectedTractIds, tractId)) {
+        var index = app.selectedTractIds.indexOf(tractId);
+        app.selectedTractIds.splice(index, 1);
+        return true;
+      }
+      return false;
+    };
   });
 });

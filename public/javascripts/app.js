@@ -33,7 +33,9 @@ function() {
     searchHouseholdByTractId: function() {},
     plotHouseholds:           function() {},
     updateHouseholdCount:     function() {},
-    updateTractDetails:       function() {}
+    updateTractDetails:       function() {},
+    addSelectedTractId:       function() {},
+    removeSelectedTractId:    function() {}
   };
 
   var getColor = app.getColor = function(d) {
@@ -66,8 +68,8 @@ function() {
       zoomToBoundsOnClick: false,
       maxClusterRadius: 50,
       disableClusteringAtZoom: 15,
-      showCoverageOnHover: false,
-      spiderfyDistanceMultiplier: 2
+      showCoverageOnHover: false
+      //spiderfyDistanceMultiplier: 2
     });
     map.addLayer(markers);
 
@@ -87,7 +89,7 @@ function() {
     var handleDataPlots = function() {
       app.plotHouseholds();
       app.updateTractDetails();
-      setTimeout(handleDataPlots, 1000);
+      setTimeout(handleDataPlots, 1500);
     };
     handleDataPlots();
 
