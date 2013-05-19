@@ -8,11 +8,9 @@ a {
 #map {
   width: 400px;
   height: 500px;
+  float: left;
   margin-left: 50px;
   margin-bottom: 100px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  float: left;
   -webkit-box-shadow: 10px 10px 5px #666;
   box-shadow: 10px 10px 5px #666;
 }
@@ -93,6 +91,8 @@ a {
 }
 #tract-details #detail-box {
   min-height: 165px;
+  max-height: 450px;
+  overflow-y: auto;
   width: 500px;
   margin: 0 10px 20px 0;
   padding: 10px;

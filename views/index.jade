@@ -55,6 +55,7 @@ block content
     | <h3><%= totalHouseholds %></h3>
 
   script(id='tract-details-tmpl', type='text/html')
+    | <button id='view-summary' class='medium radius'>View Tract Summary</button>
     | <div id='detail-box'>
     |   <h3>Tract Details (2010)</h3>
     |   <table class='tracts-list'>
@@ -78,4 +79,3 @@ block content
     |   <% }); %>
     |   </table>
     | </div>
-    | <button id='view-summary' class='medium radius'>View Tract Summary</button>
